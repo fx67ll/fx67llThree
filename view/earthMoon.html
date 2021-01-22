@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>three.js css2d - label</title>
+	<style>
+		body {
+			background-color: #000;
+			margin: 0;
+			overflow: hidden;
+		}
+ 
+		#info {
+			position: absolute;
+			top: 0px;
+			width: 100%;
+			color: #FFF;
+			padding: 5px;
+			font-family: Monospace;
+			font-size: 13px;
+			text-align: center;
+			z-index: 1;
+		}
+ 
+		.label {
+			color: green;
+			font-family: sans-serif;
+			padding: 2px;
+			background: rgba(0, 0, 0, .6);
+		}
+ 
+		a {
+			color: #000000;
+		}
+ 
+	</style>
+</head>
+<body>
+<div id="info"><a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> - three.js css2d - label</div>
+ 
+ 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/104/three.js"></script>
+<!--轨道控制器OrbitControls.js是一个相当神奇的控件，用它可以实现场景用鼠标交互，让场景动起来，控制场景的旋转、平移，缩放，下面介绍轨道控制器的代码实现方式：-->
+<!--<script src="js/controls/OrbitControls.js"></script>-->
+<script src="http://www.qfunny.cn/dist/js/OrbitControls.js"></script>
+ 
+<!--这是一个2D的render，可以在页面中渲染出一个div标签。-->
+<!--<script src="js/renderers/CSS2DRenderer.js"></script>-->
+ 
+<script src="http://www.qfunny.cn/dist/js/CSS2DRenderer.js"></script>
+<script>
+ 
+	var camera, scene, renderer, labelRenderer;
+	/*
+  * Clock
+  * 该对象用于跟踪时间。如果performance.now()可用，则 Clock 对象通过该方法实现，否则通过歉精准的Date.now()实现。
+  * Clock( autoStart : Boolean )
+  * autoStart — (可选) 是否要自动开启时钟。默认值是 true。
+  * */
+	var clock = new THREE.Clock();
+	/*
+	* TextureLoader
+	* 加载texture的一个类。 内部使用ImageLoader来加载文件。
+	*纹理（Texture）创建一个纹理贴图，将其应用到一个表面，或者作为反射/折射贴图。
+	* */
+	var textureLoader = new THREE.TextureLoader();
+ 
+	var earth, moon;
+ 
+	init();
+	animate();
+ 
+	function init() {
+		var EARTH_RADIUS = 1;
+		var MOON_RADIUS = 0.27;
+		camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);//透视相机
+		camera.position.set(10, 5, 20);//设置相机位置
+		/*
+    * OrbitControls轨道控制
+    * Orbit controls allow the camera to orbit around a target.“动态观察”控件允许相机围绕目标进行动态观察
+		* To use this, as with all files in the examples directory, you will have to include the file seperately in your HTML.
+		* 要使用它，就像 所有文件在示例目录下一样，您必须在HTML中单独包含该文件。
+    * */
+		var controls = new THREE.OrbitControls(camera);
+		/*创建场景*/
+		scene = new THREE.Scene();
+		/*
+    *创建灯光
+    * 平行光DirectionalLight( color : Integer, intensity : Float )
+    * color - (可选参数) 16进制表示光的颜色。 缺省值为 0xffffff (白色)。
+    * intensity - (可选参数) 光照的强度。缺省值为1。
+     */
+		var dirLight = new THREE.DirectionalLight(0xffffff);
+		dirLight.position.set(0, 0, 1);
+		scene.add(dirLight);
+		/*
+    * AxesHelper
+    用于简单模拟3个坐标轴的对象.
+    红色代表 X 轴. 绿色代表 Y 轴. 蓝色代表 Z 轴.
+    AxesHelper( size : Number )
+    size -- (可选的) 表示代表轴的线段长度. 默认为 1.
+    * */
+		var axesHelper = new THREE.AxesHelper(50);
+		scene.add(axesHelper);
+		/*
+		* 球缓冲几何体（SphereBufferGeometry）
+		* 这是SphereGeometry中的BufferGeometry接口。
+		* SphereBufferGeometry
+		* (radius : Float, widthSegments : Integer, heightSegments : Integer, phiStart : Float, phiLength : Float, thetaStart : Float, thetaLength : Float)
+		* radius — 球体半径，默认为1。
+		* widthSegments — 水平分段数（沿着经线分段），最小值为3，默认值为8。
+		* heightSegments — 垂直分段数（沿着纬线分段），最小值为2，默认值为6。
+		* phiStart — 指定水平（经线）起始角度，默认值为0。。
+		* phiLength — 指定水平（经线）扫描角度的大小，默认值为 Math.PI * 2。
+		* thetaStart — 指定垂直（纬线）起始角度，默认值为0。
+		* thetaLength — 指定垂直（纬线）扫描角度大小，默认值为 Math.PI。
+		*/
+		var earthGeometry = new THREE.SphereBufferGeometry(EARTH_RADIUS, 16, 16);
+		/*
+    * Phong网格材质(MeshPhongMaterial)
+    一种用于具有镜面高光的光泽表面的材质。
+    .shininess : Float//光亮:复数
+    .specular高亮的程度，越高的值越闪亮。默认值为 30。
+    * */
+		var earthMaterial = new THREE.MeshPhongMaterial({
+			specular: 0x333333,//specular高亮的程度，越高的值越闪亮。默认值为 30。
+			shininess: 30,//高亮的程度，越高的值越闪亮。默认值为 30。
+			map: textureLoader.load('textures/planets/earth_atmos_2048.jpg'),//颜色贴图。默认为null。纹理贴图颜色由漫反射颜色.color调节。
+			specularMap: textureLoader.load('textures/planets/earth_specular_2048.jpg'),//镜面反射贴图值会影响镜面高光以及环境贴图对表面的影响程度。默认值为null。
+			normalMap: textureLoader.load('textures/planets/earth_normal_2048.jpg'),//用于创建法线贴图的纹理。RGB值会影响每个像素片段的曲面法线，并更改颜色照亮的方式。法线贴图不会改变曲面的实际形状，只会改变光照。
+			normalScale: new THREE.Vector2(0.85, 0.85)//法线贴图对材质的影响程度。典型范围是0-1。默认值是Vector2设置为（1,1）。
+		});
+		/*材料和形状的结合*/
+		earth = new THREE.Mesh(earthGeometry, earthMaterial);
+		scene.add(earth);
+ 
+		var moonGeometry = new THREE.SphereBufferGeometry(MOON_RADIUS, 16, 16);
+		var moonMaterial = new THREE.MeshPhongMaterial({
+			shininess: 20,
+			map: textureLoader.load('textures/planets/moon_1024.jpg')
+		});
+		moon = new THREE.Mesh(moonGeometry, moonMaterial);
+		scene.add(moon);
+ 
+		//
+		/*
+    * 创建2D文字提示
+    * */
+		var earthDiv = document.createElement('div');
+		earthDiv.className = 'label';
+		earthDiv.textContent = 'Earth';
+		earthDiv.style.marginTop = '-1em';
+		/*创建2D实例*/
+		var earthLabel = new THREE.CSS2DObject(earthDiv);
+		earthLabel.position.set(0, EARTH_RADIUS, 0);
+		earth.add(earthLabel);
+ 
+		var moonDiv = document.createElement('div');
+		moonDiv.className = 'label';
+		moonDiv.textContent = 'Moon';
+		moonDiv.style.marginTop = '-1em';
+		var moonLabel = new THREE.CSS2DObject(moonDiv);
+		moonLabel.position.set(0, MOON_RADIUS, 0);
+		moon.add(moonLabel);
+		/*创建 -WebGL渲染器*/
+		renderer = new THREE.WebGLRenderer();
+		renderer.setClearColor(0x999999, 1.0);// /*重绘时冲刷背景图设置颜色白色，.setClearColor (color, alpha)color -- 要使用的清除色。 alpha -- 清除画布所用alpha通道。*/
+		/*
+		* .setPixelRatio ( value : number ) : null
+		* 设置设备像素比。通常用于避免HiDPI设备上绘图模糊
+		* */
+		renderer.setPixelRatio(window.devicePixelRatio);
+		/*
+		* .setSize ( width : Integer, height : Integer, updateStyle : Boolean ) : null
+		* 将输出canvas的大小调整为(width, height)并考虑设备像素比，且将视口从(0, 0)开始调整到适合大小
+		*将updateStyle设置为false以阻止对canvas的样式做任何改变
+		* */
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		document.body.appendChild(renderer.domElement);
+		/*
+    CSS2DRenderer is a simplified version of CSS3DRenderer. The only transformation that is supported is translation.
+    The renderer is very useful if you want to combine HTML based labels with 3D objects. Here too, the respective DOM elements are wrapped into an instance of CSS2DObject and added to the scene graph.
+    css2drender是css3drender的简化版本。唯一支持的转换是转换。
+    如果要将基于HTML的标签与三维对象结合起来，渲染器非常有用。
+    在这里，相应的dom元素也被包装成css2dobject的实例并添加到场景图中。
+    * */
+		labelRenderer = new THREE.CSS2DRenderer();
+		labelRenderer.setSize(window.innerWidth, window.innerHeight);
+		labelRenderer.domElement.style.position = 'absolute';
+		labelRenderer.domElement.style.top = 0;
+		document.body.appendChild(labelRenderer.domElement);
+	}
+ 
+	function animate() {
+ 
+		requestAnimationFrame(animate);
+		/*
+    * .getElapsedTime () : Float
+    * 获取自时钟启动后的秒数，摒弃将 oldTime 设置为当前时间。
+    * 如果 autoStart 设置为 true 且时钟并未运行，则该方法同时启动时钟。
+    * */
+		var elapsed = clock.getElapsedTime();
+ 
+		moon.position.set(Math.sin(elapsed) * 5, 0, Math.cos(elapsed) * 5);
+ 
+		renderer.render(scene, camera);
+		labelRenderer.render(scene, camera);
+ 
+	}
+ 
+</script>
+</body>
+</html>
