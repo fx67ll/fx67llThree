@@ -1,4 +1,5 @@
 # fx67llThree
 learn Threejs
 
-plagiarism examples now
+for project now  
+note & plagiarism examples
