@@ -13,11 +13,17 @@ Router.prototype.push = function push(location) {
 
 import store from '@/store/index.js'
 
-export const fx67llRoutes = [{
+export const fx67llRoutes = [
+	// {
+	// 	path: '/',
+	// 	name: 'index',
+	// 	component: () => import('@v/index.vue') //首页
+	// },
+	{
 		path: '/',
-		name: 'index',
-		component: () => import('@v/index.vue') //首页
-	}
+		name: 'note1',
+		component: () => import('@v/note/note1.vue') //学习笔记第一页
+	},
 ]
 
 const router = new Router({
@@ -30,19 +36,6 @@ const router = new Router({
 
 // 全局路由守卫
 router.beforeEach((to, from, next) => {
-	// 不是首页的话将自动显示返回按钮
-	if (to.name !== 'index') {
-		store.dispatch("setBtnStateAsync", true);
-		if(to.name === 'doc') {
-			store.dispatch("setBtnTypeAsync", 'doc');
-		}else if(to.name === 'splitarea'){
-			store.dispatch("setBtnTypeAsync", 'dev');
-		}else{
-			store.dispatch("setBtnTypeAsync", 'default');
-		}
-	} else {
-		store.dispatch("setBtnStateAsync", false);
-	}
 	next() // 必须使用 next ,执行效果依赖 next 方法的调用参数
 })
 
