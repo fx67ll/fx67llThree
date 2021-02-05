@@ -39,4 +39,4 @@
 
 ### 几何体
 参考资料
-	+ 
++ [学习Three.js——几何体(Geometry)](https://blog.csdn.net/a13602955218/article/details/85222878 "学习Three.js——几何体(Geometry)")
