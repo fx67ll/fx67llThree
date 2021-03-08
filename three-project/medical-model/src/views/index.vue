@@ -1,5 +1,5 @@
 <template>
-	<div class="model-box">医疗模型</div>
+	<div id="model-container" class="model-box"></div>
 </template>
 
 <script>
@@ -14,8 +14,7 @@ export default {
 		return {};
 	},
 	mounted() {
-		// this.modelInit();
-		// 周三完成模型加载以及动画实现
+		this.modelInit();
 	},
 	methods: {
 		modelInit() {
@@ -29,8 +28,7 @@ export default {
 			animate();
 
 			function init() {
-				const container = document.createElement('div');
-				document.body.appendChild(container);
+				const container = document.getElementById('model-container');
 
 				camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
 				camera.position.set(100, 200, 300);
@@ -52,6 +50,7 @@ export default {
 				dirLight.shadow.camera.right = 120;
 				scene.add(dirLight);
 
+				// 添加光线辅助线
 				// scene.add( new THREE.CameraHelper( dirLight.shadow.camera ) );
 
 				// ground
@@ -67,11 +66,12 @@ export default {
 
 				// model
 				const loader = new FBXLoader();
-				loader.load('models/fbx/Samba Dancing.fbx', function(object) {
+				loader.load('models/Human.fbx', function(object) {
 					mixer = new THREE.AnimationMixer(object);
-
-					const action = mixer.clipAction(object.animations[0]);
-					action.play();
+					
+					console.log(object)
+					// const action = mixer.clipAction(object.animations[0]);
+					// action.play();
 
 					object.traverse(function(child) {
 						if (child.isMesh) {
@@ -90,7 +90,7 @@ export default {
 				container.appendChild(renderer.domElement);
 
 				const controls = new OrbitControls(camera, renderer.domElement);
-				controls.target.set(0, 100, 0);
+				controls.target.set(0, -50, 0);
 				controls.update();
 
 				window.addEventListener('resize', onWindowResize);
@@ -129,6 +129,9 @@ export default {
 .model-box {
 	width: 100%;
 	height: 100%;
+	// width: calc(~"100% - 2px");
+	// height: calc(~"100% - 2px");
+	// border: 1px solid red;
 	.ban-user-select();
 }
 </style>
