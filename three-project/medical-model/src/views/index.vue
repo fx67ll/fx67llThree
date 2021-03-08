@@ -28,6 +28,7 @@ export default {
 			animate();
 
 			function init() {
+				// 模型加载的容器
 				const container = document.getElementById('model-container');
 
 				camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
@@ -36,11 +37,12 @@ export default {
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color(0xa0a0a0);
 				scene.fog = new THREE.Fog(0xa0a0a0, 200, 1000);
-
-				const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
-				hemiLight.position.set(0, 200, 0);
-				scene.add(hemiLight);
-
+				
+				// 创建半球光源用于模拟真实环境
+				const ambientLight = new THREE.AmbientLight(0x0c0c0c);
+				scene.add(ambientLight); 
+				
+				// 设置平行光赖添加模型阴影
 				const dirLight = new THREE.DirectionalLight(0xffffff);
 				dirLight.position.set(0, 200, 100);
 				dirLight.castShadow = true;
@@ -66,10 +68,15 @@ export default {
 
 				// model
 				const loader = new FBXLoader();
-				loader.load('models/Human.fbx', function(object) {
+				loader.load('models/ceshi.fbx', function(object) {
 					mixer = new THREE.AnimationMixer(object);
 					
-					console.log(object)
+					console.log(object.children[0].geometry.morphAttributes)
+					console.log(object.children[0].morphTargetInfluences[0])
+					object.children[0].morphTargetInfluences[0] = 0 // 前升
+					object.children[0].morphTargetInfluences[1] = 1 // 张嘴
+					object.children[0].morphTargetInfluences[2] = 0.9 // 抬头
+					
 					// const action = mixer.clipAction(object.animations[0]);
 					// action.play();
 
