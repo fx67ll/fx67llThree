@@ -1,7 +1,20 @@
 <template>
 	<div class="model-box">
 		<div id="model-container" class="three-box"></div>
-		<div class="tool-box"><el-slider v-model="mouseValue" :min="0" :max="1" :step="0.1" show-input @change="setMouseVal()"></el-slider></div>
+		<div class="tool-box">
+			<div class="tool-item-box">
+				<span class="tool-item-title">前升系数：</span>
+				<el-slider class="tool-item-slider" v-model="chinValue" :min="0" :max="3" :step="0.1" show-input @change="setChinVal()"></el-slider>
+			</div>
+			<div class="tool-item-box">
+				<span class="tool-item-title">张嘴系数：</span>
+				<el-slider class="tool-item-slider" v-model="mouseValue" :min="0" :max="2" :step="0.1" show-input @change="setMouseVal()"></el-slider>
+			</div>
+			<div class="tool-item-box">
+				<span class="tool-item-title">抬头系数：</span>
+				<el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -15,8 +28,10 @@ export default {
 	name: 'modelIndex',
 	data() {
 		return {
-			// 控制人物模型的张口大小
+			// 人物模型的前升、张嘴、抬头大小
+			chinValue: 0,
 			mouseValue: 0,
+			raiseValue: 0,
 			// 相机对象
 			camera: null,
 			// 场景对象
@@ -37,11 +52,17 @@ export default {
 		this.modelInit();
 	},
 	methods: {
-		// 修改变形数据
-		setMouseVal(value) {
-			console.log(this.mouseValue)
-			console.log(this.scene.children[4].children[0].morphTargetInfluences[2]);
-			this.scene.children[4].children[0].morphTargetInfluences[2] = this.mouseValue;
+		// 修改前升变形数据
+		setChinVal() {
+			this.scene.children[4].children[0].morphTargetInfluences[0] = this.chinValue;
+		},
+		// 修改张嘴变形数据
+		setMouseVal() {
+			this.scene.children[4].children[0].morphTargetInfluences[1] = this.mouseValue;
+		},
+		// 修改抬头变形数据
+		setRaiseVal() {
+			this.scene.children[4].children[0].morphTargetInfluences[2] = this.raiseValue;
 		},
 		modelInit() {
 			this.clock = new THREE.Clock();
@@ -96,9 +117,9 @@ export default {
 
 				// console.log(object.children[0].geometry.morphAttributes);
 				// console.log(object.children[0].morphTargetInfluences[0]);
-				object.children[0].morphTargetInfluences[0] = 0; // 前升
-				object.children[0].morphTargetInfluences[1] = 1; // 张嘴
-				object.children[0].morphTargetInfluences[2] = 0.9; // 抬头
+				// object.children[0].morphTargetInfluences[0] = 0; // 前升
+				// object.children[0].morphTargetInfluences[1] = 1; // 张嘴
+				// object.children[0].morphTargetInfluences[2] = 0.9; // 抬头
 
 				// const action = self.mixer.clipAction(object.animations[0]);
 				// action.play();
@@ -155,6 +176,7 @@ export default {
 </script>
 
 <style lang="less" scoped="scoped">
+@titleWidth: 120px;
 .model-box {
 	width: 100%;
 	height: 100%;
@@ -164,12 +186,27 @@ export default {
 		height: 100%;
 	}
 	.tool-box {
-		width: 400px;
-		border: 1px solid red;
+		width: 500px;
 		padding: 20px;
 		position: absolute;
 		top: 30px;
 		right: 30px;
+		.tool-item-box {
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+			.tool-item-title {
+				width: @titleWidth;
+				color: #727479;
+				font-size: 20px;
+				line-height: 40px;
+				font-weight: 600;
+			}
+			.tool-item-slider {
+				width: calc(100% - @titleWidth);
+			}
+		}
 	}
 }
 </style>
