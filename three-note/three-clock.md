@@ -62,3 +62,6 @@ render();
 	> `setInterval()`方法，不考虑浏览器中发生的事情，如果你正在浏览其他页面，这个函数仍然会每隔几毫秒就会被调用一次，
 	> 除此之外，`setInterval()`方法并没有跟显示器的重画同步，着可能会导致较高的CPU使用，降低系统效率。 —《Three.js 开发指南》
 + 使用`requestAnimationFrame()`函数即可解决上述问题，详情看上方`requestAnimationFrame()`函数描述，这个函数的时间间隔是浏览器定义的，我们可以在指定的函数里面实现绘画操作
+
+### 在vue中使用`requestAnimationFrame()`方法
+一定要传入函数名而不是带上立即执行符号，如`requestAnimationFrame(this.animate)`即可
