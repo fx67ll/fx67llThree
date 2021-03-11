@@ -14,6 +14,17 @@
 				<span class="tool-item-title">抬头系数：</span>
 				<el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider>
 			</div>
+			<div class="tool-item-box">
+				<span class="tool-item-title">透明系数：</span>
+				<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" show-input @change="setOpacityVal()"></el-slider>
+			</div>
+			<div class="tool-item-box" style="justify-content: flex-start;">
+				<span class="tool-item-title">材质性状：</span>
+				<!-- <el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider> -->
+				<el-button @click="showVis">{{ btnText }}</el-button>
+				<el-color-picker v-model="modelColor" style="margin: 0 10px;" @change="colorChange($event)"></el-color-picker>
+				<!-- <el-button @click="test">测试</el-button> -->
+			</div>
 		</div>
 	</div>
 </template>
@@ -45,7 +56,13 @@ export default {
 			// 时间对象
 			clock: null,
 			// FBX模型加载对象
-			fbxloader: null
+			fbxloader: null,
+			// 按钮文字
+			btnText: '隐藏模型',
+			// 取色器默认颜色
+			modelColor: '#ff0000',
+			// 模型透明度
+			opacityValue: 1
 		};
 	},
 	mounted() {
@@ -63,6 +80,26 @@ export default {
 		// 修改抬头变形数据
 		setRaiseVal() {
 			this.scene.children[4].children[0].morphTargetInfluences[2] = this.raiseValue;
+		},
+		// 显示隐藏模型
+		showVis() {
+			this.scene.children[4].children[0].material.visible = !this.scene.children[4].children[0].material.visible;
+			this.scene.children[4].children[0].material.visible ? (this.btnText = '隐藏模型') : (this.btnText = '显示模型');
+		},
+		// 修改材质颜色
+		colorChange(val) {
+			this.scene.children[4].children[0].material.color.set(val);
+		},
+		// 修改材质透明度
+		setOpacityVal() {
+			this.scene.children[4].children[0].material.transparent = true;
+			this.scene.children[4].children[0].material.opacity = this.opacityValue;
+		},
+		// 测试
+		test() {
+			// 下一步暂时没想好
+			// console.log(this.scene);
+			console.log(this.scene.children[4].children[0].material);
 		},
 		modelInit() {
 			this.clock = new THREE.Clock();
