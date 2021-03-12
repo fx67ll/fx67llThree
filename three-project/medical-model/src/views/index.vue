@@ -4,15 +4,15 @@
 		<div class="tool-box">
 			<div class="tool-item-box">
 				<span class="tool-item-title">前升系数：</span>
-				<el-slider class="tool-item-slider" v-model="chinValue" :min="0" :max="3" :step="0.1" show-input @change="setChinVal()"></el-slider>
+				<el-slider class="tool-item-slider" v-model="chinValue" :min="0" :max="3" :step="0.01" show-input @change="setChinVal()"></el-slider>
 			</div>
 			<div class="tool-item-box">
 				<span class="tool-item-title">张嘴系数：</span>
-				<el-slider class="tool-item-slider" v-model="mouseValue" :min="0" :max="2" :step="0.1" show-input @change="setMouseVal()"></el-slider>
+				<el-slider class="tool-item-slider" v-model="mouseValue" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
 			</div>
 			<div class="tool-item-box">
 				<span class="tool-item-title">抬头系数：</span>
-				<el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider>
+				<el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.01" show-input @change="setRaiseVal()"></el-slider>
 			</div>
 			<div class="tool-item-box">
 				<span class="tool-item-title">透明系数：</span>
@@ -23,7 +23,7 @@
 				<!-- <el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider> -->
 				<el-button @click="showVis">{{ btnText }}</el-button>
 				<el-color-picker v-model="modelColor" style="margin: 0 10px;" @change="colorChange($event)"></el-color-picker>
-				<!-- <el-button @click="test">测试</el-button> -->
+				<el-button @click="test">测试</el-button>
 			</div>
 		</div>
 	</div>
