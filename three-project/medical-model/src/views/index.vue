@@ -23,7 +23,20 @@
 				<!-- <el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider> -->
 				<el-button @click="showVis">{{ btnText }}</el-button>
 				<el-color-picker v-model="modelColor" style="margin: 0 10px;" @change="colorChange($event)"></el-color-picker>
-				<el-button @click="test">测试</el-button>
+				<!-- <el-button @click="test">测试</el-button> -->
+			</div>
+			<div class="tool-item-box">
+				<span class="tool-item-title">喉咙系数：</span>
+				<el-slider class="tool-item-slider" v-model="throatValue" :min="0" :max="1" :step="0.01" show-input @change="setThroatVal()"></el-slider>
+			</div>
+			<!-- <div class="tool-item-box">
+				<span class="tool-item-title">脊椎系数：</span>
+				<el-slider class="tool-item-slider" v-model="neckValue" :min="-1" :max="1" :step="0.01" show-input @change="setNeckVal()"></el-slider>
+			</div> -->
+			<div class="tool-item-box" style="justify-content: flex-start;">
+				<span class="tool-item-title">材质性状：</span>
+				<el-button @click="showVisThroat">{{ btnTextThroat }}</el-button>
+				<el-button @click="showVisNeck">{{ btnTextNeck }}</el-button>
 			</div>
 		</div>
 	</div>
@@ -58,48 +71,79 @@ export default {
 			// FBX模型加载对象
 			fbxloader: null,
 			// 按钮文字
-			btnText: '隐藏模型',
+			btnText: '隐藏人物',
 			// 取色器默认颜色
 			modelColor: '#ff0000',
 			// 模型透明度
-			opacityValue: 1
+			opacityValue: 0.5,
+			// 喉咙变形系数
+			throatValue: 0,
+			// 脊椎变形系数
+			neckValue: 0,
+			// 喉咙显隐文字
+			btnTextThroat: '隐藏喉咙',
+			// 脊椎显隐文字
+			btnTextNeck: '隐藏脊椎'
 		};
 	},
 	mounted() {
 		this.modelInit();
 	},
 	methods: {
+		// 修改喉咙显隐
+		showVisThroat() {
+			this.scene.children[4].children[2].material[5].visible = !this.scene.children[4].children[2].material[5].visible;
+			this.scene.children[4].children[2].material[4].visible = !this.scene.children[4].children[2].material[4].visible;
+			this.scene.children[4].children[2].material[3].visible = !this.scene.children[4].children[2].material[3].visible;
+			this.scene.children[4].children[2].material[2].visible = !this.scene.children[4].children[2].material[2].visible;
+			this.scene.children[4].children[2].material[1].visible = !this.scene.children[4].children[2].material[1].visible;
+			this.scene.children[4].children[2].material[0].visible = !this.scene.children[4].children[2].material[0].visible;
+			this.scene.children[4].children[2].material[0].visible ? (this.btnTextThroat = '隐藏喉咙') : (this.btnTextThroat = '显示喉咙');
+		},
+		// 修改脊椎显隐
+		showVisNeck() {
+			this.scene.children[4].children[0].material.visible = !this.scene.children[4].children[0].material.visible;
+			this.scene.children[4].children[1].material.visible = !this.scene.children[4].children[1].material.visible;
+			this.scene.children[4].children[1].material.visible ? (this.btnTextNeck = '隐藏脊椎') : (this.btnTextNeck = '显示脊椎');
+		},
+		// 修改喉咙变形数据
+		setThroatVal() {
+			this.scene.children[4].children[2].morphTargetInfluences[0] = this.throatValue;
+		},
+		// 修改脊椎变形数据
+		setNeckVal() {
+			this.scene.children[4].children[1].morphTargetInfluences[0] = -(this.neckValue);
+		},
 		// 修改前升变形数据
 		setChinVal() {
-			this.scene.children[4].children[0].morphTargetInfluences[0] = this.chinValue;
+			this.scene.children[4].children[3].morphTargetInfluences[0] = this.chinValue;
 		},
 		// 修改张嘴变形数据
 		setMouseVal() {
-			this.scene.children[4].children[0].morphTargetInfluences[1] = this.mouseValue;
+			this.scene.children[4].children[3].morphTargetInfluences[1] = this.mouseValue;
 		},
 		// 修改抬头变形数据
 		setRaiseVal() {
-			this.scene.children[4].children[0].morphTargetInfluences[2] = this.raiseValue;
+			this.scene.children[4].children[3].morphTargetInfluences[2] = this.raiseValue;
 		},
 		// 显示隐藏模型
 		showVis() {
-			this.scene.children[4].children[0].material.visible = !this.scene.children[4].children[0].material.visible;
-			this.scene.children[4].children[0].material.visible ? (this.btnText = '隐藏模型') : (this.btnText = '显示模型');
+			this.scene.children[4].children[3].material.visible = !this.scene.children[4].children[3].material.visible;
+			this.scene.children[4].children[3].material.visible ? (this.btnText = '隐藏人物') : (this.btnText = '显示人物');
 		},
 		// 修改材质颜色
 		colorChange(val) {
-			this.scene.children[4].children[0].material.color.set(val);
+			this.scene.children[4].children[3].material.color.set(val);
 		},
 		// 修改材质透明度
 		setOpacityVal() {
-			this.scene.children[4].children[0].material.transparent = true;
-			this.scene.children[4].children[0].material.opacity = this.opacityValue;
+			this.scene.children[4].children[3].material.transparent = true;
+			this.scene.children[4].children[3].material.opacity = this.opacityValue;
 		},
 		// 测试
 		test() {
 			// 下一步暂时没想好
-			// console.log(this.scene);
-			console.log(this.scene.children[4].children[0].material);
+			console.log(this.scene);
 		},
 		modelInit() {
 			this.clock = new THREE.Clock();
@@ -127,7 +171,8 @@ export default {
 			// 设置平行光赖添加模型阴影
 			const dirLight = new THREE.DirectionalLight(0xffffff);
 			dirLight.position.set(0, 200, 100);
-			dirLight.castShadow = true;
+			// 添加平行光但是去掉阴影
+			// dirLight.castShadow = true;
 			dirLight.shadow.camera.top = 180;
 			dirLight.shadow.camera.bottom = -100;
 			dirLight.shadow.camera.left = -120;
@@ -149,7 +194,7 @@ export default {
 			self.scene.add(grid);
 
 			// 使用FBXLoader加载模型
-			self.fbxloader.load('models/Human.fbx', function(object) {
+			self.fbxloader.load('models/Human-Prod.fbx', function(object) {
 				self.mixer = new THREE.AnimationMixer(object);
 
 				// console.log(object.children[0].geometry.morphAttributes);
@@ -167,7 +212,15 @@ export default {
 						child.receiveShadow = true;
 					}
 				});
-
+				
+				// 调整模型的初始中心点
+				object.position.y = -220
+				
+				// 调整模型初始透明度
+				object.children[3].material.transparent = true;
+				object.children[3].material.opacity = 0.5
+				
+				// console.log(object)
 				self.scene.add(object);
 			});
 
