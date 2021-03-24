@@ -1,42 +1,80 @@
 <template>
 	<div class="model-box">
 		<div id="model-container" class="three-box"></div>
-		<div class="tool-box">
-			<div class="tool-item-box">
-				<span class="tool-item-title">前升系数：</span>
-				<el-slider class="tool-item-slider" v-model="chinValue" :min="0" :max="3" :step="0.01" show-input @change="setChinVal()"></el-slider>
+		<div class="panel-box">
+			<div class="tool-box">
+				<div class="tool-item-box">
+					<span class="tool-item-title">前升系数：</span>
+					<el-slider class="tool-item-slider" v-model="chinValue" :min="0" :max="3" :step="0.01" show-input @change="setChinVal()"></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">张嘴系数：</span>
+					<el-slider class="tool-item-slider" v-model="mouseValue" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">抬头系数：</span>
+					<el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.01" show-input @change="setRaiseVal()"></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">透明系数：</span>
+					<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" show-input @change="setOpacityVal()"></el-slider>
+				</div>
+				<div class="tool-item-box" style="justify-content: flex-start;">
+					<span class="tool-item-title">材质性状：</span>
+					<!-- <el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider> -->
+					<el-button @click="showVis">{{ btnText }}</el-button>
+					<el-color-picker v-model="modelColor" style="margin: 0 10px;" @change="colorChange($event)"></el-color-picker>
+					<!-- <el-button @click="test">测试</el-button> -->
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">喉咙系数：</span>
+					<el-slider class="tool-item-slider" v-model="throatValue" :min="0" :max="1" :step="0.01" show-input @change="setThroatVal()"></el-slider>
+				</div>
+				<!-- <div class="tool-item-box">
+					<span class="tool-item-title">脊椎系数：</span>
+					<el-slider class="tool-item-slider" v-model="neckValue" :min="-1" :max="1" :step="0.01" show-input @change="setNeckVal()"></el-slider>
+				</div> -->
+				<div class="tool-item-box" style="justify-content: flex-start;">
+					<span class="tool-item-title">材质性状：</span>
+					<el-button @click="showVisThroat">{{ btnTextThroat }}</el-button>
+					<el-button @click="showVisNeck">{{ btnTextNeck }}</el-button>
+				</div>
 			</div>
-			<div class="tool-item-box">
-				<span class="tool-item-title">张嘴系数：</span>
-				<el-slider class="tool-item-slider" v-model="mouseValue" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
-			</div>
-			<div class="tool-item-box">
-				<span class="tool-item-title">抬头系数：</span>
-				<el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.01" show-input @change="setRaiseVal()"></el-slider>
-			</div>
-			<div class="tool-item-box">
-				<span class="tool-item-title">透明系数：</span>
-				<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" show-input @change="setOpacityVal()"></el-slider>
-			</div>
-			<div class="tool-item-box" style="justify-content: flex-start;">
-				<span class="tool-item-title">材质性状：</span>
-				<!-- <el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider> -->
-				<el-button @click="showVis">{{ btnText }}</el-button>
-				<el-color-picker v-model="modelColor" style="margin: 0 10px;" @change="colorChange($event)"></el-color-picker>
-				<!-- <el-button @click="test">测试</el-button> -->
-			</div>
-			<div class="tool-item-box">
-				<span class="tool-item-title">喉咙系数：</span>
-				<el-slider class="tool-item-slider" v-model="throatValue" :min="0" :max="1" :step="0.01" show-input @change="setThroatVal()"></el-slider>
-			</div>
-			<!-- <div class="tool-item-box">
-				<span class="tool-item-title">脊椎系数：</span>
-				<el-slider class="tool-item-slider" v-model="neckValue" :min="-1" :max="1" :step="0.01" show-input @change="setNeckVal()"></el-slider>
-			</div> -->
-			<div class="tool-item-box" style="justify-content: flex-start;">
-				<span class="tool-item-title">材质性状：</span>
-				<el-button @click="showVisThroat">{{ btnTextThroat }}</el-button>
-				<el-button @click="showVisNeck">{{ btnTextNeck }}</el-button>
+			<div class="info-box">
+				<el-card>
+					<div class="info-item-box">
+						<span class="info-item-title">仰头角度：</span>
+						<span class="info-item-num">25°</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">张口角度：</span>
+						<span class="info-item-num">25°</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">下巴长度：</span>
+						<span class="info-item-num">13mm</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">甲颏距离：</span>
+						<span class="info-item-num">15mm</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">喉结位移距离：</span>
+						<span class="info-item-num">0.53mm</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">颞颌关节位移距离：</span>
+						<span class="info-item-num">0.66mm</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">舌体厚度：</span>
+						<span class="info-item-num">0.36mm</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">声门视野：</span>
+						<span class="info-item-num">3cm</span>
+					</div>
+				</el-card>
 			</div>
 		</div>
 	</div>
@@ -112,7 +150,7 @@ export default {
 		},
 		// 修改脊椎变形数据
 		setNeckVal() {
-			this.scene.children[4].children[1].morphTargetInfluences[0] = -(this.neckValue);
+			this.scene.children[4].children[1].morphTargetInfluences[0] = -this.neckValue;
 		},
 		// 修改前升变形数据
 		setChinVal() {
@@ -142,7 +180,7 @@ export default {
 		},
 		// 测试
 		test() {
-			// 下一步暂时没想好
+			// 周六之前的任务是参照UE修改当前功能，完成第一阶段前端代码的交付
 			console.log(this.scene);
 		},
 		modelInit() {
@@ -212,14 +250,14 @@ export default {
 						child.receiveShadow = true;
 					}
 				});
-				
+
 				// 调整模型的初始中心点
-				object.position.y = -220
-				
+				object.position.y = -220;
+
 				// 调整模型初始透明度
 				object.children[3].material.transparent = true;
-				object.children[3].material.opacity = 0.5
-				
+				object.children[3].material.opacity = 0.5;
+
 				// console.log(object)
 				self.scene.add(object);
 			});
@@ -266,7 +304,8 @@ export default {
 </script>
 
 <style lang="less" scoped="scoped">
-@titleWidth: 120px;
+@tooltitleWidth: 120px;
+@infotitleWidth: 150px;
 .model-box {
 	width: 100%;
 	height: 100%;
@@ -275,26 +314,54 @@ export default {
 		width: 100%;
 		height: 100%;
 	}
-	.tool-box {
+	.panel-box {
 		width: 500px;
 		padding: 20px;
 		position: absolute;
 		top: 30px;
 		right: 30px;
-		.tool-item-box {
-			width: 100%;
-			display: flex;
-			justify-content: space-between;
-			margin-bottom: 10px;
-			.tool-item-title {
-				width: @titleWidth;
-				color: #727479;
-				font-size: 20px;
-				line-height: 40px;
-				font-weight: 600;
+		.tool-box {
+			.tool-item-box {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10px;
+				.tool-item-title {
+					width: @tooltitleWidth;
+					color: #727479;
+					font-size: 20px;
+					line-height: 40px;
+					font-weight: 600;
+				}
+				.tool-item-slider {
+					width: calc(100% - @tooltitleWidth);
+				}
 			}
-			.tool-item-slider {
-				width: calc(100% - @titleWidth);
+		}
+		.info-box {
+			margin-top: 50px;
+			padding: 20px 0 10px 0;
+			.info-item-box {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10px;
+				.info-item-title {
+					width: @infotitleWidth;
+					color: #727479;
+					font-size: 16px;
+					line-height: 20px;
+					text-align: right;
+				}
+				.info-item-num {
+					width: calc(100% - @infotitleWidth);
+					font-size: 16px;
+					line-height: 20px;
+					text-indent: 20px;
+				}
+			}
+			.info-item-box:nth-child(1){
+				margin-top: 10px;
 			}
 		}
 	}
