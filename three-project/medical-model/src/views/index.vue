@@ -5,7 +5,7 @@
 			<div class="tool-box">
 				<div class="tool-item-box">
 					<span class="tool-item-title">仰头分级：</span>
-					<el-select v-model="headLevel" placeholder="请选择仰头分级" class="tool-item-select">
+					<el-select class="tool-item-select" v-model="headLevel" :clearable="true" placeholder="请选择仰头分级" @change="headLevelChange()" @clear="headLevelClear()">
 						<el-option label="1级" :value="1"></el-option>
 						<el-option label="2级" :value="2"></el-option>
 						<el-option label="3级" :value="3"></el-option>
@@ -14,66 +14,75 @@
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">仰头角度：</span>
-					<el-slider class="tool-item-slider" v-model="headAngle" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider
+						class="tool-item-slider"
+						v-model="headAngle.num"
+						:min="headAngle.minnum"
+						:max="headAngle.maxnum"
+						:step="headAngle.stepnum"
+						:disabled="headAngle.isoff"
+						show-input
+						@change=""
+					></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">张口角度：</span>
-					<el-slider class="tool-item-slider" v-model="mouseAngle" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider class="tool-item-slider" v-model="mouseAngle" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">喉结位移：</span>
-					<el-slider class="tool-item-slider" v-model="throatShift" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider class="tool-item-slider" v-model="throatShift" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">颞颌关节：</span>
-					<el-slider class="tool-item-slider" v-model="jointShift" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider class="tool-item-slider" v-model="jointShift" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">舌体厚度：</span>
-					<el-slider class="tool-item-slider" v-model="tongueThickness" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider class="tool-item-slider" v-model="tongueThickness" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title tool-item-title-long">舌体厚度缺失下舌体厚度常数：</span>
-					<el-slider class="tool-item-slider tool-item-slider-long" v-model="tongueConstantA" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider class="tool-item-slider tool-item-slider-long" v-model="tongueConstantA" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title tool-item-title-long">舌颏缺失下舌体厚度常数：</span>
-					<el-slider class="tool-item-slider tool-item-slider-long" v-model="tongueConstantB" :min="0" :max="2" :step="0.01" show-input @change="setMouseVal()"></el-slider>
+					<el-slider class="tool-item-slider tool-item-slider-long" v-model="tongueConstantB" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
 				</div>
 			</div>
 			<div class="info-box">
 				<el-card>
 					<div class="info-item-box">
 						<span class="info-item-title">仰头角度：</span>
-						<span class="info-item-num">25°</span>
+						<span class="info-item-num">0°</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">张口角度：</span>
-						<span class="info-item-num">25°</span>
+						<span class="info-item-num">0°</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">下巴长度：</span>
-						<span class="info-item-num">13mm</span>
+						<span class="info-item-num">0mm</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">甲颏距离：</span>
-						<span class="info-item-num">15mm</span>
+						<span class="info-item-num">0mm</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">喉结位移：</span>
-						<span class="info-item-num">0.53mm</span>
+						<span class="info-item-num">0mm</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">颞颌关节位移：</span>
-						<span class="info-item-num">0.66mm</span>
+						<span class="info-item-num">0mm</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">舌体厚度：</span>
-						<span class="info-item-num">0.36mm</span>
+						<span class="info-item-num">0mm</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">声门视野：</span>
-						<span class="info-item-num">3cm</span>
+						<span class="info-item-num">0cm</span>
 					</div>
 				</el-card>
 			</div>
@@ -107,67 +116,90 @@ export default {
 			clock: null,
 			// FBX模型加载对象
 			fbxloader: null,
-			// 变形参数
+			// 各类变形参数
 			headLevel: null,
-			headValue: null,
-			mouseValue: null,
+			headAngle: {
+				num: 0,
+				minnum: 0,
+				maxnum: 0,
+				stepnum: 0,
+				isoff: true
+			},
+			mouseAngle: null,
 			throatShift: null,
-			jointShift: null
+			jointShift: null,
+			tongueThickness: null,
+			tongueConstantA: null,
+			tongueConstantB: null
 		};
 	},
 	mounted() {
 		this.modelInit();
 	},
 	methods: {
-		// 修改喉咙显隐
-		showVisThroat() {
-			this.scene.children[4].children[2].material[5].visible = !this.scene.children[4].children[2].material[5].visible;
-			this.scene.children[4].children[2].material[4].visible = !this.scene.children[4].children[2].material[4].visible;
-			this.scene.children[4].children[2].material[3].visible = !this.scene.children[4].children[2].material[3].visible;
-			this.scene.children[4].children[2].material[2].visible = !this.scene.children[4].children[2].material[2].visible;
-			this.scene.children[4].children[2].material[1].visible = !this.scene.children[4].children[2].material[1].visible;
-			this.scene.children[4].children[2].material[0].visible = !this.scene.children[4].children[2].material[0].visible;
-			this.scene.children[4].children[2].material[0].visible ? (this.btnTextThroat = '隐藏喉咙') : (this.btnTextThroat = '显示喉咙');
+		// 仰头分级与角度联动
+		headLevelChange() {
+			var self = this;
+			switch (self.headLevel) {
+				case 1:
+					self.headAngle = {
+						num: 25,
+						minnum: 25,
+						maxnum: 35,
+						stepnum: 5,
+						isoff: false
+					};
+					break;
+
+				case 2:
+					self.headAngle = {
+						num: 15,
+						minnum: 15,
+						maxnum: 25,
+						stepnum: 5,
+						isoff: false
+					};
+					break;
+
+				case 3:
+					self.headAngle = {
+						num: 5,
+						minnum: 5,
+						maxnum: 15,
+						stepnum: 5,
+						isoff: false
+					};
+					break;
+
+				case 4:
+					self.headAngle = {
+						num: -5,
+						minnum: -5,
+						maxnum: 5,
+						stepnum: 5,
+						isoff: false
+					};
+					break;
+
+				default:
+					self.headAngle = {
+						num: 0,
+						minnum: 0,
+						maxnum: 0,
+						stepnum: 0,
+						isoff: true
+					};
+			}
 		},
-		// 修改脊椎显隐
-		showVisNeck() {
-			this.scene.children[4].children[0].material.visible = !this.scene.children[4].children[0].material.visible;
-			this.scene.children[4].children[1].material.visible = !this.scene.children[4].children[1].material.visible;
-			this.scene.children[4].children[1].material.visible ? (this.btnTextNeck = '隐藏脊椎') : (this.btnTextNeck = '显示脊椎');
-		},
-		// 修改喉咙变形数据
-		setThroatVal() {
-			this.scene.children[4].children[2].morphTargetInfluences[0] = this.throatValue;
-		},
-		// 修改脊椎变形数据
-		setNeckVal() {
-			this.scene.children[4].children[1].morphTargetInfluences[0] = -this.neckValue;
-		},
-		// 修改前升变形数据
-		setChinVal() {
-			this.scene.children[4].children[3].morphTargetInfluences[0] = this.chinValue;
-		},
-		// 修改张嘴变形数据
-		setMouseVal() {
-			this.scene.children[4].children[3].morphTargetInfluences[1] = this.mouseValue;
-		},
-		// 修改抬头变形数据
-		setRaiseVal() {
-			this.scene.children[4].children[3].morphTargetInfluences[2] = this.raiseValue;
-		},
-		// 显示隐藏模型
-		showVis() {
-			this.scene.children[4].children[3].material.visible = !this.scene.children[4].children[3].material.visible;
-			this.scene.children[4].children[3].material.visible ? (this.btnText = '隐藏人物') : (this.btnText = '显示人物');
-		},
-		// 修改材质颜色
-		colorChange(val) {
-			this.scene.children[4].children[3].material.color.set(val);
-		},
-		// 修改材质透明度
-		setOpacityVal() {
-			this.scene.children[4].children[3].material.transparent = true;
-			this.scene.children[4].children[3].material.opacity = this.opacityValue;
+		// 清除仰头分级
+		headLevelClear() {
+			this.headAngle = {
+				num: 0,
+				minnum: 0,
+				maxnum: 0,
+				stepnum: 0,
+				isoff: true
+			};
 		},
 		// 测试
 		test() {
@@ -369,6 +401,7 @@ export default {
 			}
 		}
 		.info-box {
+			display: none;
 			margin-top: 50px;
 			padding: 20px 0 10px 0;
 			.info-item-box {
