@@ -24,7 +24,7 @@
 					<!-- <el-slider class="tool-item-slider" v-model="raiseValue" :min="0" :max="1" :step="0.1" show-input @change="setRaiseVal()"></el-slider> -->
 					<el-button @click="showVis">{{ btnText }}</el-button>
 					<el-color-picker v-model="modelColor" style="margin: 0 10px;" @change="colorChange($event)"></el-color-picker>
-					<!-- <el-button @click="test">测试</el-button> -->
+					<el-button @click="test">测试</el-button>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">喉咙系数：</span>
@@ -39,6 +39,10 @@
 					<el-button @click="showVisThroat">{{ btnTextThroat }}</el-button>
 					<el-button @click="showVisNeck">{{ btnTextNeck }}</el-button>
 				</div>
+				<!-- <div class="tool-item-box">
+					<span class="tool-item-title">测试系数：</span>
+					<el-slider class="tool-item-slider" v-model="testValue" :min="0" :max="1" :step="0.01" show-input @change="setTest()"></el-slider>
+				</div> -->
 			</div>
 			<div class="info-box">
 				<el-card>
@@ -89,7 +93,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 import _ from 'underscore';
 export default {
-	name: 'modelIndex 第一版备份',
+	name: 'modelIndex-back',
 	data() {
 		return {
 			// 人物模型的前升、张嘴、抬头大小
@@ -123,13 +127,27 @@ export default {
 			// 喉咙显隐文字
 			btnTextThroat: '隐藏喉咙',
 			// 脊椎显隐文字
-			btnTextNeck: '隐藏脊椎'
+			btnTextNeck: '隐藏脊椎',
+			// 测试系数
+			testValue: 0 
 		};
 	},
 	mounted() {
 		this.modelInit();
 	},
 	methods: {
+		// 系数测试
+		setTest() {
+			this.scene.children[4].children[10].morphTargetInfluences[0] = this.testValue;
+		},
+		// 测试
+		test() {
+			// 周六之前的任务是参照UE修改当前功能，完成第一阶段前端代码的交付
+			// console.log(this.scene);
+			// _.each(this.scene.children[4].children, function(item, key) {
+			// 	console.log(key, item.name);
+			// });
+		},
 		// 修改喉咙显隐
 		showVisThroat() {
 			this.scene.children[4].children[2].material[5].visible = !this.scene.children[4].children[2].material[5].visible;
@@ -179,11 +197,6 @@ export default {
 		setOpacityVal() {
 			this.scene.children[4].children[3].material.transparent = true;
 			this.scene.children[4].children[3].material.opacity = this.opacityValue;
-		},
-		// 测试
-		test() {
-			// 周六之前的任务是参照UE修改当前功能，完成第一阶段前端代码的交付
-			console.log(this.scene);
 		},
 		modelInit() {
 			this.clock = new THREE.Clock();
