@@ -1,9 +1,92 @@
 <template>
 	<div class="model-box">
 		<div id="model-container" class="three-box"></div>
+		<div class="test-box">
+			<div class="tool-box">
+				<div class="tool-item-box">
+					<span class="tool-item-title">透明系数：</span>
+					<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" @change="setOpacityVal(opacityValue)"></el-slider>
+				</div>
+				<!-- <div class="tool-item-box" style="justify-content: flex-start;">
+					<span class="tool-item-title">群组显隐：</span>
+					<el-button @click="showModel(1, fbxGroupKeys.a.isShow)">A</el-button>
+					<el-button @click="showModel(2, fbxGroupKeys.b.isShow)">B</el-button>
+					<el-button @click="showModel(3, fbxGroupKeys.c.isShow)">C</el-button>
+					<el-button @click="showModel(4, fbxGroupKeys.d.isShow)">D</el-button>
+				</div> -->
+				<div class="tool-item-box" style="justify-content: flex-start;">
+					<span class="tool-item-title">测试工具：</span>
+					<el-button @click="showModel()">全部</el-button>
+					<el-button @click="test">测试</el-button>
+				</div>
+				<div class="info-box">
+					<el-card>
+						<div class="info-item-box">
+							<span class="info-item-title">张口角度：</span>
+							<span class="info-item-num">{{ (mouseAngle.num * 30).toFixed(2) }}°</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">下巴长度：</span>
+							<span class="info-item-num">{{ (45 + (chinShift.num / 3) * 15).toFixed(2) }}mm</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">仰头角度：</span>
+							<span class="info-item-num">{{ headAngle.num }}°</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">甲颏距离：</span>
+							<span class="info-item-num">15mm</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">喉结位移距离：</span>
+							<span class="info-item-num">0.53mm</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">颞颌关节位移距离：</span>
+							<span class="info-item-num">0.66mm</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">舌体厚度：</span>
+							<span class="info-item-num">0.36mm</span>
+						</div>
+						<div class="info-item-box">
+							<span class="info-item-title">声门视野：</span>
+							<span class="info-item-num">3cm</span>
+						</div>
+					</el-card>
+				</div>
+			</div>
+		</div>
 		<div class="panel-box">
 			<div class="tool-box">
 				<div class="tool-item-box">
+					<!-- 张口角度0-30° -->
+					<span class="tool-item-title">张口角度：</span>
+					<el-slider
+						class="tool-item-slider"
+						v-model="mouseAngle.num"
+						:min="mouseAngle.minnum"
+						:max="mouseAngle.maxnum"
+						:step="mouseAngle.stepnum"
+						show-input
+						@change="setMouseAngle()"
+					></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<!-- 下巴长度起始值45mm，轻度35mm，重度55mm -->
+					<span class="tool-item-title tool-item-title-middle">模拟下巴前伸：</span>
+					<el-slider
+						class="tool-item-slider tool-item-slider-middle"
+						v-model="chinShift.num"
+						:min="chinShift.minnum"
+						:max="chinShift.maxnum"
+						:step="chinShift.stepnum"
+						show-input
+						@change="setChinShift()"
+					></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<!-- 仰头角度，1级25-35°，2级25-15°，3级15-5°，4级5-(-5)° -->
 					<span class="tool-item-title">仰头分级：</span>
 					<el-select class="tool-item-select" v-model="headLevel" :clearable="true" placeholder="请选择仰头分级" @change="headLevelChange()" @clear="headLevelClear()">
 						<el-option label="1级" :value="1"></el-option>
@@ -22,69 +105,57 @@
 						:step="headAngle.stepnum"
 						:disabled="headAngle.isoff"
 						show-input
+						@change="setHeadAngle()"
+					></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<!-- 喉位移常数项：6，喉位移常数项：X，暂为0 -->
+					<span class="tool-item-title tool-item-title-long">喉结位移常数：</span>
+					<el-input class="tool-item-input tool-item-input-long" v-model="throatShift" :clearable="true" placeholder="请输入喉结位移常数" @change=""></el-input>
+				</div>
+				<div class="tool-item-box">
+					<!-- 颞颌关节活动度常数项：15，常数b：b=1 -->
+					<span class="tool-item-title tool-item-title-long">颞颌关节活动度常数：</span>
+					<el-input class="tool-item-input tool-item-input-long" v-model="jointShiftA" :clearable="true" placeholder="请输入颞颌关节活动常数" @change=""></el-input>
+				</div>
+				<div class="tool-item-box">
+					<!-- 颞颌关节张口度常数项：18，常数b：b=3 -->
+					<span class="tool-item-title tool-item-title-long">颞颌关节张口度常数：</span>
+					<el-input class="tool-item-input tool-item-input-long" v-model="jointShiftB" :clearable="true" placeholder="请输入颞颌关节活动常数" @change=""></el-input>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">舌体厚度：</span>
+					<el-slider
+						class="tool-item-slider"
+						v-model="tongueThickness.num"
+						:min="tongueThickness.minnum"
+						:max="tongueThickness.maxnum"
+						:step="tongueThickness.stepnum"
+						show-input
 						@change=""
 					></el-slider>
 				</div>
 				<div class="tool-item-box">
-					<span class="tool-item-title">张口角度：</span>
-					<el-slider class="tool-item-slider" v-model="mouseAngle" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
+					<!-- 舌体厚度常数项：10，系数b：b=15 -->
+					<span class="tool-item-title tool-item-title-long">舌体厚度常数：</span>
+					<el-input
+						class="tool-item-input tool-item-input-long"
+						v-model="tongueThicknessConstant"
+						:clearable="true"
+						placeholder="请输入舌体厚度常数"
+						@change=""
+					></el-input>
 				</div>
 				<div class="tool-item-box">
-					<span class="tool-item-title">喉结位移：</span>
-					<el-slider class="tool-item-slider" v-model="throatShift" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
+					<!-- 舌厚度缺失下舌体厚度常数项：20，系数b：b=100 -->
+					<span class="tool-item-title tool-item-title-long">舌体厚度缺失下常数：</span>
+					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantA" :clearable="true" placeholder="请输入舌体厚度缺失下常数" @change=""></el-input>
 				</div>
 				<div class="tool-item-box">
-					<span class="tool-item-title">颞颌关节：</span>
-					<el-slider class="tool-item-slider" v-model="jointShift" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
+					<!-- 舌颏缺失下舌体厚度常数项：20，系数b：b=140 -->
+					<span class="tool-item-title tool-item-title-long">舌颏距离缺失下常数：</span>
+					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantB" :clearable="true" placeholder="请输入舌颏距离缺失下常数" @change=""></el-input>
 				</div>
-				<div class="tool-item-box">
-					<span class="tool-item-title">舌体厚度：</span>
-					<el-slider class="tool-item-slider" v-model="tongueThickness" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
-				</div>
-				<div class="tool-item-box">
-					<span class="tool-item-title tool-item-title-long">舌体厚度缺失下舌体厚度常数：</span>
-					<el-slider class="tool-item-slider tool-item-slider-long" v-model="tongueConstantA" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
-				</div>
-				<div class="tool-item-box">
-					<span class="tool-item-title tool-item-title-long">舌颏缺失下舌体厚度常数：</span>
-					<el-slider class="tool-item-slider tool-item-slider-long" v-model="tongueConstantB" :min="0" :max="2" :step="0.01" show-input @change=""></el-slider>
-				</div>
-			</div>
-			<div class="info-box">
-				<el-card>
-					<div class="info-item-box">
-						<span class="info-item-title">仰头角度：</span>
-						<span class="info-item-num">0°</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">张口角度：</span>
-						<span class="info-item-num">0°</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">下巴长度：</span>
-						<span class="info-item-num">0mm</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">甲颏距离：</span>
-						<span class="info-item-num">0mm</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">喉结位移：</span>
-						<span class="info-item-num">0mm</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">颞颌关节位移：</span>
-						<span class="info-item-num">0mm</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">舌体厚度：</span>
-						<span class="info-item-num">0mm</span>
-					</div>
-					<div class="info-item-box">
-						<span class="info-item-title">声门视野：</span>
-						<span class="info-item-num">0cm</span>
-					</div>
-				</el-card>
 			</div>
 		</div>
 	</div>
@@ -116,27 +187,138 @@ export default {
 			clock: null,
 			// FBX模型加载对象
 			fbxloader: null,
-			// 各类变形参数
+			// FBX模型对象群组
+			fbxGroup: null,
+			// FBX模型对象编组，根据模型序列编组
+			fbxGroupKeys: {
+				// 模组01
+				a: {
+					keys: [0, 1, 2, 6, 18],
+					isShow: true
+				},
+				// 模组02
+				b: {
+					keys: [3, 4, 5, 7, 16],
+					isShow: true
+				},
+				// 模组03
+				c: {
+					keys: [8, 10, 11, 12, 15],
+					isShow: true
+				},
+				// 模组04
+				d: {
+					keys: [9, 13, 14, 17, 19],
+					isShow: true
+				},
+				// 人体外壳编组
+				human: {
+					keys: [0, 4, 10],
+					isShow: true
+				}
+			},
+			// 是否显示全部模型
+			isShowAll: true,
+			// 张口角度
+			mouseAngle: {
+				num: 0,
+				minnum: 0,
+				maxnum: 1,
+				stepnum: 0.01
+			},
+			// 下巴前伸
+			chinShift: {
+				num: 0,
+				minnum: -2,
+				maxnum: 2,
+				stepnum: 0.02
+			},
+			// 仰头角度级别
 			headLevel: null,
+			// 仰头角度
 			headAngle: {
 				num: 0,
 				minnum: 0,
-				maxnum: 0,
-				stepnum: 0,
-				isoff: true
+				maxnum: 1,
+				stepnum: 0.01,
+				isoff: false
 			},
-			mouseAngle: null,
-			throatShift: null,
-			jointShift: null,
-			tongueThickness: null,
-			tongueConstantA: null,
-			tongueConstantB: null
+			// 喉结位移常数
+			throatShift: 6,
+			// 颞颌关节活动度常数
+			jointShiftA: 15,
+			// 颞颌关节张口度常数
+			jointShiftB: 18,
+			// 舌体厚度
+			tongueThickness: {
+				num: 0,
+				minnum: 0,
+				maxnum: 10,
+				stepnum: 1
+			},
+			// 舌体厚度常数
+			tongueThicknessConstant: 10,
+			// 舌体厚度缺失下常数
+			tongueConstantA: 20,
+			// 舌颏距离缺失下常数
+			tongueConstantB: 20,
+			// 透明系数
+			opacityValue: 0.3
 		};
 	},
 	mounted() {
 		this.modelInit();
 	},
 	methods: {
+		// 测试用例
+		test() {
+			// 周六之前的任务是完成第一阶段前端代码的交付
+			// console.log(this.scene);
+			// this.getModelGroup();
+			
+			// this.showModel(0, false);
+			// this.showModel(2, true);
+			// _.each(this.getEachItem(this.fbxGroupKeys.b.keys), function(item, key) {
+			// 	console.log(key, item);
+			// });
+			// console.log(this.getEachItem(this.fbxGroupKeys.b.keys).length);
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[0].visible = false;
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[1].visible = false;
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[2].morphTargetInfluences[0] = 5;
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[3].visible = false;
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[4].morphTargetInfluences[0] = 5;
+
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[0].visible = false;
+			// this.getEachItem(this.fbxGroupKeys.a.keys)[0].morphTargetInfluences[0] = 1;
+		},
+		// 修改材质透明度，第一个参数是FBX模型群组，第二个参数是透明系数（0-1）
+		setOpacityVal(opacityValue) {
+			_.each(this.getEachItem(this.fbxGroupKeys.human.keys), function(item, key) {
+				item.material.transparent = true;
+				item.material.opacity = opacityValue;
+			});
+		},
+		// 修改张口角度
+		setMouseAngle() {
+			this.showModel(0, false);
+			this.showModel(1, true);
+			this.getEachItem(this.fbxGroupKeys.a.keys)[0].morphTargetInfluences[0] = this.mouseAngle.num;
+			this.getEachItem(this.fbxGroupKeys.a.keys)[1].morphTargetInfluences[0] = this.mouseAngle.num;
+		},
+		// 修改下巴前伸
+		setChinShift() {
+			this.showModel(0, false);
+			this.showModel(2, true);
+			this.getEachItem(this.fbxGroupKeys.b.keys)[1].morphTargetInfluences[0] = this.chinShift.num;
+			this.getEachItem(this.fbxGroupKeys.b.keys)[2].morphTargetInfluences[0] = this.chinShift.num;
+		},
+		// 修改头部仰头动作
+		setHeadAngle() {
+			this.showModel(0, false);
+			this.showModel(3, true);
+			this.getEachItem(this.fbxGroupKeys.c.keys)[1].morphTargetInfluences[0] = this.headAngle.num;
+			this.getEachItem(this.fbxGroupKeys.c.keys)[2].morphTargetInfluences[0] = this.headAngle.num;
+		},
 		// 仰头分级与角度联动
 		headLevelChange() {
 			var self = this;
@@ -201,37 +383,76 @@ export default {
 				isoff: true
 			};
 		},
-		// 测试
-		test() {
-			// 周六之前的任务是参照UE修改当前功能，完成第一阶段前端代码的交付
-			console.log(this.scene);
-
-			_.each(this.scene.children[4].children, function(item, key) {
-				console.log(item.name);
+		// 修改群组的显示隐藏，传群组下标和是否显隐的布尔值，不可以使用'a=!a'表达式，在循环过程中会有重复'!'的过程，导致显隐结果不一致
+		showModel(index, isShow) {
+			var self = this;
+			switch (index) {
+				case 1:
+					this.forEachItem(this.getEachItem(this.fbxGroupKeys.a.keys), isShow);
+					break;
+				case 2:
+					this.forEachItem(this.getEachItem(this.fbxGroupKeys.b.keys), isShow);
+					break;
+				case 3:
+					this.forEachItem(this.getEachItem(this.fbxGroupKeys.c.keys), isShow);
+					break;
+				case 4:
+					this.forEachItem(this.getEachItem(this.fbxGroupKeys.d.keys), isShow);
+					break;
+				case 0:
+					this.forEachItem(this.fbxGroup.children, isShow);
+					break;
+				default:
+					self.isShowAll = !self.isShowAll;
+					_.each(this.fbxGroupKeys, function(item, key) {
+						item.isShow = !self.isShowAll;
+					});
+					this.forEachItem(this.fbxGroup.children, this.isShowAll);
+			}
+		},
+		// 获取指定下标的模型对象群组
+		getEachItem(arr) {
+			var objArr = [];
+			_.each(this.fbxGroup.children, function(item, key) {
+				_.each(arr, function(obj, index) {
+					if (key === obj) {
+						objArr.push(item);
+					}
+				});
 			});
-
-			this.scene.children[4].children[5].material.visible = false;
-
-			// this.scene.children[4].children[0]  houlou01
-			// this.scene.children[4].children[1]  bozi02
-			// this.scene.children[4].children[2]  ren02
-			// this.scene.children[4].children[3]  houlou02
-			// this.scene.children[4].children[4]  jinzhui01
-			// this.scene.children[4].children[5]  ren01
-			// this.scene.children[4].children[6]  bozi01
-			// this.scene.children[4].children[7]  jinzhui02
-			// this.scene.children[4].children[8]  shegu
-			// this.scene.children[4].children[9]  houjie01
-			// this.scene.children[4].children[10]  houjie02
-			// this.scene.children[4].children[11]  houlou03
-			// this.scene.children[4].children[12]  xiaba
-			// this.scene.children[4].children[13]  shange
-			// this.scene.children[4].children[14]  bozi03
-			// this.scene.children[4].children[15]  ren03
-			// this.scene.children[4].children[16]  jinzhui03
-			// this.scene.children[4].children[17]  houjie03
-			// this.scene.children[4].children[18]  shetou
-			// this.scene.children[4].children[19]  houjie04
+			return objArr;
+		},
+		// 处理复杂模型显隐
+		forEachItem(arr, isShow) {
+			var self = this;
+			_.each(arr, function(item, key) {
+				if (Array.isArray(item.material)) {
+					_.each(item.material, function(obj, index) {
+						obj.visible = isShow;
+					});
+				} else {
+					item.material.visible = isShow;
+				}
+			});
+		},
+		// 初始化的时候处理所有模型统一显示，其实不需要，保险起见还是启用
+		initVisible() {
+			var self = this;
+			_.each(this.fbxGroup.children, function(item, key) {
+				if (Array.isArray(item.material)) {
+					_.each(item.material, function(obj, index) {
+						obj.visible = self.isShowAll;
+					});
+				} else {
+					item.material.visible = self.isShowAll;
+				}
+			});
+		},
+		getModelGroup() {
+			// 查看模型序列，待会写一个方法截取结尾01020304以及没有结尾的自动分abcd多组
+			_.each(this.fbxGroup.children, function(item, key) {
+				console.log(key, item.name);
+			});
 		},
 		modelInit() {
 			this.clock = new THREE.Clock();
@@ -282,14 +503,8 @@ export default {
 			self.scene.add(grid);
 
 			// 使用FBXLoader加载模型
-			self.fbxloader.load('models/Human-003.fbx', function(object) {
+			self.fbxloader.load('models/Human-005.fbx', function(object) {
 				self.mixer = new THREE.AnimationMixer(object);
-
-				// console.log(object.children[0].geometry.morphAttributes);
-				// console.log(object.children[0].morphTargetInfluences[0]);
-				// object.children[0].morphTargetInfluences[0] = 0; // 前升
-				// object.children[0].morphTargetInfluences[1] = 1; // 张嘴
-				// object.children[0].morphTargetInfluences[2] = 0.9; // 抬头
 
 				// const action = self.mixer.clipAction(object.animations[0]);
 				// action.play();
@@ -304,12 +519,23 @@ export default {
 				// 调整模型的初始中心点
 				// object.position.y = 220;
 
-				// 调整模型初始透明度
-				object.children[3].material.transparent = true;
-				object.children[3].material.opacity = 0.5;
-
-				// console.log(object)
 				self.scene.add(object);
+
+				// 添加fbx模型对象群组，并完成各类初始化
+				self.fbxGroup = self.scene.children[4];
+
+				// 全部显示
+				self.initVisible();
+
+				// 设置初始化透明度
+				self.setOpacityVal(self.opacityValue);
+
+				// 默认显示第一个张口角度的模型
+				self.showModel(0, false);
+				self.showModel(1, true);
+
+				// 仅在开发中测试用
+				self.test();
 			});
 
 			self.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -354,9 +580,6 @@ export default {
 </script>
 
 <style lang="less" scoped="scoped">
-@tooltitleWidth: 120px;
-@infotitleWidth: 150px;
-@tooltitleWidthLong: 300px;
 .model-box {
 	width: 100%;
 	height: 100%;
@@ -365,68 +588,101 @@ export default {
 		width: 100%;
 		height: 100%;
 	}
+	.test-box {
+		width: 400px;
+		padding: 20px;
+		position: absolute;
+		top: 70px;
+		left: 30px;
+	}
 	.panel-box {
 		width: 500px;
 		padding: 20px;
 		position: absolute;
 		top: 30px;
 		right: 30px;
-		.tool-box {
-			.tool-item-box {
-				width: 100%;
-				display: flex;
-				justify-content: flex-start;
-				margin-bottom: 10px;
-				.tool-item-title {
-					width: @tooltitleWidth;
-					color: #727479;
-					font-size: 20px;
-					line-height: 40px;
-					font-weight: 600;
-				}
-				.tool-item-slider {
-					width: calc(100% - @tooltitleWidth);
-					position: relative;
-					left: 12px;
-				}
-				.tool-item-select {
-					width: calc(70% - @tooltitleWidth);
-				}
-				.tool-item-title-long {
-					width: @tooltitleWidthLong;
-				}
-				.tool-item-slider-long {
-					width: calc(100% - @tooltitleWidthLong);
-				}
-			}
+	}
+}
+
+// 本页面中工具盒子公共样式
+@tooltitleWidth: 120px;
+@tooltitleWidthMid: 160px;
+@tooltitleWidthLong: 300px;
+.tool-box {
+	.tool-item-box {
+		width: 100%;
+		display: flex;
+		justify-content: flex-start;
+		margin-bottom: 10px;
+		// 标题样式
+		.tool-item-title {
+			width: @tooltitleWidth;
+			color: #727479;
+			font-size: 20px;
+			line-height: 40px;
+			font-weight: 600;
 		}
-		.info-box {
-			display: none;
-			margin-top: 50px;
-			padding: 20px 0 10px 0;
-			.info-item-box {
-				width: 100%;
-				display: flex;
-				justify-content: space-between;
-				margin-bottom: 10px;
-				.info-item-title {
-					width: @infotitleWidth;
-					color: #727479;
-					font-size: 16px;
-					line-height: 20px;
-					text-align: right;
-				}
-				.info-item-num {
-					width: calc(100% - @infotitleWidth);
-					font-size: 16px;
-					line-height: 20px;
-					text-indent: 20px;
-				}
-			}
-			.info-item-box:nth-child(1) {
-				margin-top: 10px;
-			}
+		.tool-item-title-middle {
+			width: @tooltitleWidthMid;
 		}
+		.tool-item-title-long {
+			width: @tooltitleWidthLong;
+		}
+
+		// 选择器样式
+		.tool-item-select {
+			width: calc(70% - @tooltitleWidth);
+		}
+
+		// 拖动条样式
+		.tool-item-slider {
+			width: calc(100% - @tooltitleWidth);
+			position: relative;
+			left: 12px;
+		}
+		.tool-item-slider-middle {
+			width: calc(100% - @tooltitleWidthMid);
+		}
+		.tool-item-slider-long {
+			width: calc(100% - @tooltitleWidthLong);
+		}
+
+		// 输入样式
+		.tool-item-input {
+			width: calc(70% - @tooltitleWidth);
+			position: relative;
+			left: 12px;
+		}
+		.tool-item-input-long {
+			width: calc(130% - @tooltitleWidthLong);
+		}
+	}
+}
+
+// 实时数据盒子公共样式
+@infotitleWidth: 170px;
+.info-box {
+	margin-top: 50px;
+	padding: 20px 0 10px 0;
+	.info-item-box {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 10px;
+		font-size: 18px;
+		line-height: 20px;
+		.info-item-title {
+			width: @infotitleWidth;
+			color: #727479;
+			text-align: right;
+		}
+		.info-item-num {
+			width: calc(100% - @infotitleWidth);
+			text-indent: 20px;
+		}
+	}
+	.info-item-box:nth-child(1) {
+		margin-top: 10px;
 	}
 }
 </style>
