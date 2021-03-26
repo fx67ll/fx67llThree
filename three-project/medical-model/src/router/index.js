@@ -19,6 +19,11 @@ export const fx67llRoutes = [
 		name: 'index',
 		component: () => import('@v/index.vue') //首页
 	},
+	{
+		path: '/back',
+		name: 'back',
+		component: () => import('@v/back.vue') //备份
+	},
 ]
 
 const router = new Router({
