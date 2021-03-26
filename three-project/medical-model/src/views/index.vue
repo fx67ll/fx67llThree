@@ -3,61 +3,86 @@
 		<div id="model-container" class="three-box"></div>
 		<div class="test-box">
 			<div class="tool-box">
-				<div class="tool-item-box">
-					<span class="tool-item-title">透明系数：</span>
-					<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" @change="setOpacityVal(opacityValue)"></el-slider>
-				</div>
-				<!-- <div class="tool-item-box" style="justify-content: flex-start;">
-					<span class="tool-item-title">群组显隐：</span>
-					<el-button @click="showModel(1, fbxGroupKeys.a.isShow)">A</el-button>
-					<el-button @click="showModel(2, fbxGroupKeys.b.isShow)">B</el-button>
-					<el-button @click="showModel(3, fbxGroupKeys.c.isShow)">C</el-button>
-					<el-button @click="showModel(4, fbxGroupKeys.d.isShow)">D</el-button>
-				</div> -->
 				<div class="tool-item-box" style="justify-content: flex-start;">
+					<span class="tool-item-title">查看声门：</span>
+					<el-button @click="checkGlottis()">{{ checkGlottisText }}</el-button>
+				</div>
+				<!-- <div v-show="isCheckGlottis">
+					<div class="tool-item-box">
+						<span class="tool-item-title">(查看声门)上颚透明：</span>
+						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+					</div>
+					<div class="tool-item-box">
+						<span class="tool-item-title">(查看声门)下巴透明：</span>
+						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+					</div>
+					<div class="tool-item-box">
+						<span class="tool-item-title">(查看声门)舌头透明：</span>
+						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+					</div>
+					<div class="tool-item-box">
+						<span class="tool-item-title">(查看声门)舌骨透明：</span>
+						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+					</div>
+					<div class="tool-item-box">
+						<span class="tool-item-title">(查看声门)喉结透明：</span>
+						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+					</div>
+				</div> -->
+				<!-- <div class="tool-item-box" style="justify-content: flex-start;">
 					<span class="tool-item-title">测试工具：</span>
-					<el-button @click="showModel()">全部</el-button>
 					<el-button @click="test">测试</el-button>
-				</div>
-				<div class="info-box">
-					<el-card>
-						<div class="info-item-box">
-							<span class="info-item-title">张口角度：</span>
-							<span class="info-item-num">{{ (mouseAngle.num * 30).toFixed(2) }}°</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">下巴长度：</span>
-							<span class="info-item-num">{{ (45 + (chinShift.num / 3) * 15).toFixed(2) }}mm</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">仰头角度：</span>
-							<span class="info-item-num">{{ headAngle.num }}°</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">甲颏距离：</span>
-							<span class="info-item-num">15mm</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">喉结位移距离：</span>
-							<span class="info-item-num">0.53mm</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">颞颌关节位移距离：</span>
-							<span class="info-item-num">0.66mm</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">舌体厚度：</span>
-							<span class="info-item-num">0.36mm</span>
-						</div>
-						<div class="info-item-box">
-							<span class="info-item-title">声门视野：</span>
-							<span class="info-item-num">3cm</span>
-						</div>
-					</el-card>
-				</div>
+				</div> -->
+			</div>
+			<div class="info-box">
+				<el-card>
+					<div class="info-item-box">
+						<span class="info-item-title">张口角度：</span>
+						<span class="info-item-num">{{ (mouseAngle.num * 30).toFixed(0) }}°</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">下巴长度：</span>
+						<span class="info-item-num">{{ (45 + (chinShift.num / 3) * 15).toFixed(0) }}mm</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">仰头角度：</span>
+						<span class="info-item-num">{{ ((headAngle.num / 1) * 40 - 5).toFixed(0) }}°</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">甲颏距离：</span>
+						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">( 后台实时计算 )</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">喉结位移距离：</span>
+						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">( 后台实时计算 )</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">颞颌关节位移距离：</span>
+						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">( 后台实时计算 )</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">舌体厚度：</span>
+						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">( 后台实时计算 )</span>
+					</div>
+					<div class="info-item-box">
+						<span class="info-item-title">声门视野：</span>
+						<!-- <span class="info-item-num">0cm</span> -->
+						<span class="info-item-num">( 后台实时计算 )</span>
+					</div>
+				</el-card>
 			</div>
 		</div>
-		<div class="panel-box">
+		<div
+			class="panel-box"
+			v-loading="isCheckGlottis"
+			element-loading-text="正在查看声门，禁止调整参数"
+			element-loading-spinner="el-icon-lock"
+			:element-loading-background="loadingBgc"
+		>
 			<div class="tool-box">
 				<div class="tool-item-box">
 					<!-- 张口角度0-30° -->
@@ -111,17 +136,17 @@
 				<div class="tool-item-box">
 					<!-- 喉位移常数项：6，喉位移常数项：X，暂为0 -->
 					<span class="tool-item-title tool-item-title-long">喉结位移常数：</span>
-					<el-input class="tool-item-input tool-item-input-long" v-model="throatShift" :clearable="true" placeholder="请输入喉结位移常数" @change=""></el-input>
+					<el-input class="tool-item-input tool-item-input-long" v-model="throatShift" :clearable="true" placeholder="请输入喉结位移常数"></el-input>
 				</div>
 				<div class="tool-item-box">
 					<!-- 颞颌关节活动度常数项：15，常数b：b=1 -->
 					<span class="tool-item-title tool-item-title-long">颞颌关节活动度常数：</span>
-					<el-input class="tool-item-input tool-item-input-long" v-model="jointShiftA" :clearable="true" placeholder="请输入颞颌关节活动常数" @change=""></el-input>
+					<el-input class="tool-item-input tool-item-input-long" v-model="jointShiftA" :clearable="true" placeholder="请输入颞颌关节活动常数"></el-input>
 				</div>
 				<div class="tool-item-box">
 					<!-- 颞颌关节张口度常数项：18，常数b：b=3 -->
 					<span class="tool-item-title tool-item-title-long">颞颌关节张口度常数：</span>
-					<el-input class="tool-item-input tool-item-input-long" v-model="jointShiftB" :clearable="true" placeholder="请输入颞颌关节活动常数" @change=""></el-input>
+					<el-input class="tool-item-input tool-item-input-long" v-model="jointShiftB" :clearable="true" placeholder="请输入颞颌关节活动常数"></el-input>
 				</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">舌体厚度：</span>
@@ -132,29 +157,44 @@
 						:max="tongueThickness.maxnum"
 						:step="tongueThickness.stepnum"
 						show-input
-						@change=""
 					></el-slider>
 				</div>
 				<div class="tool-item-box">
 					<!-- 舌体厚度常数项：10，系数b：b=15 -->
 					<span class="tool-item-title tool-item-title-long">舌体厚度常数：</span>
-					<el-input
-						class="tool-item-input tool-item-input-long"
-						v-model="tongueThicknessConstant"
-						:clearable="true"
-						placeholder="请输入舌体厚度常数"
-						@change=""
-					></el-input>
+					<el-input class="tool-item-input tool-item-input-long" v-model="tongueThicknessConstant" :clearable="true" placeholder="请输入舌体厚度常数"></el-input>
 				</div>
 				<div class="tool-item-box">
 					<!-- 舌厚度缺失下舌体厚度常数项：20，系数b：b=100 -->
 					<span class="tool-item-title tool-item-title-long">舌体厚度缺失下常数：</span>
-					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantA" :clearable="true" placeholder="请输入舌体厚度缺失下常数" @change=""></el-input>
+					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantA" :clearable="true" placeholder="请输入舌体厚度缺失下常数"></el-input>
 				</div>
 				<div class="tool-item-box">
 					<!-- 舌颏缺失下舌体厚度常数项：20，系数b：b=140 -->
 					<span class="tool-item-title tool-item-title-long">舌颏距离缺失下常数：</span>
-					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantB" :clearable="true" placeholder="请输入舌颏距离缺失下常数" @change=""></el-input>
+					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantB" :clearable="true" placeholder="请输入舌颏距离缺失下常数"></el-input>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">人体透明：</span>
+					<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" show-input @change="setOpacityVal()"></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">气管透明：</span>
+					<el-slider class="tool-item-slider" v-model="throatOpacityValue" :min="0" :max="1" :step="0.01" show-input @change="setThroatOpacityVal()"></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">颈椎透明：</span>
+					<el-slider class="tool-item-slider" v-model="vertebraeOpacityValue" :min="0" :max="1" :step="0.01" show-input @change="setVertebraeOpacityVal()"></el-slider>
+				</div>
+				<div class="tool-item-box">
+					<span class="tool-item-title">喉结透明：</span>
+					<el-slider class="tool-item-slider" v-model="adamOpacityValue" :min="0" :max="1" :step="0.01" show-input @change="setAdamOpacityVal()"></el-slider>
+				</div>
+				<div class="tool-item-box tool-item-btnbox">
+					<el-button :type="isShowHuman ? 'primary' : 'info'" @click="visHuman()">{{ isShowHumanText }}</el-button>
+					<el-button :type="isShowThroat ? 'primary' : 'info'" @click="visThroat()">{{ isShowThroatText }}</el-button>
+					<el-button :type="isShowVertebrae ? 'primary' : 'info'" @click="visVertebrae()">{{ isShowVertebraeText }}</el-button>
+					<el-button :type="isShowAdam ? 'primary' : 'info'" @click="visAdam()">{{ isShowAdamText }}</el-button>
 				</div>
 			</div>
 		</div>
@@ -189,32 +229,47 @@ export default {
 			fbxloader: null,
 			// FBX模型对象群组
 			fbxGroup: null,
-			// FBX模型对象编组，根据模型序列编组
+			// 加载的模型地址
+			modelUrl: 'models/Human-004.fbx',
+			// FBX模型对象编组
+			// 替换模型后，用`getModelGroup()`方法根据模型序列编组
+			// 还需要修改下方：setMouseAngle()方法、setChinShift()方法、setHeadAngle()方法、checkGlottis()方法 的相关可以变形的模型下标，需要自己用`test()`方法尝试
 			fbxGroupKeys: {
-				// 模组01
+				// 模组01，张口分组，用于显示隐藏分组
 				a: {
-					keys: [0, 1, 2, 6, 18],
+					keys: [7, 6, 8, 11, 18],
 					isShow: true
 				},
-				// 模组02
+				// 模组02，下巴前伸分组，用于显示隐藏分组
 				b: {
-					keys: [3, 4, 5, 7, 16],
+					keys: [0, 10, 3, 9, 16],
 					isShow: true
 				},
-				// 模组03
+				// 模组03，仰头分组，用于显示隐藏分组
 				c: {
-					keys: [8, 10, 11, 12, 15],
+					keys: [2, 13, 1, 14, 15],
 					isShow: true
 				},
-				// 模组04
+				// 模组04，声门演示模组，包含一个喉结
 				d: {
-					keys: [9, 13, 14, 17, 19],
+					keys: [4, 5, 12, 17, 19],
 					isShow: true
 				},
-				// 人体外壳编组
+				// 人体外壳编组，用于透明度修改
 				human: {
-					keys: [0, 4, 10],
-					isShow: true
+					keys: [7, 9, 13]
+				},
+				// 喉咙编组，用于透明度修改
+				throat: {
+					keys: [6, 2, 3]
+				},
+				// 颈椎编组，用于透明度修改
+				vertebrae: {
+					keys: [0, 1, 10, 11, 8, 14]
+				},
+				// 喉结编组，用于透明度修改
+				adam: {
+					keys: [15, 16, 18]
 				}
 			},
 			// 是否显示全部模型
@@ -241,7 +296,7 @@ export default {
 				minnum: 0,
 				maxnum: 1,
 				stepnum: 0.01,
-				isoff: false
+				isoff: true
 			},
 			// 喉结位移常数
 			throatShift: 6,
@@ -254,7 +309,7 @@ export default {
 				num: 0,
 				minnum: 0,
 				maxnum: 10,
-				stepnum: 1
+				stepnum: 0.1
 			},
 			// 舌体厚度常数
 			tongueThicknessConstant: 10,
@@ -262,8 +317,38 @@ export default {
 			tongueConstantA: 20,
 			// 舌颏距离缺失下常数
 			tongueConstantB: 20,
-			// 透明系数
-			opacityValue: 0.3
+			// 人体透明
+			opacityValue: 0.3,
+			// 气管透明
+			throatOpacityValue: 1,
+			// 颈椎透明
+			vertebraeOpacityValue: 1,
+			// 喉结透明
+			adamOpacityValue: 1,
+			// 是否显示人体
+			isShowHuman: true,
+			// 是否显示人体提示文字
+			isShowHumanText: '隐藏人体',
+			// 是否显示气管
+			isShowThroat: true,
+			// 是否显示气管提示文字
+			isShowThroatText: '隐藏气管',
+			// 是否显示颈椎
+			isShowVertebrae: true,
+			// 是否显示颈椎提示文字
+			isShowVertebraeText: '隐藏颈椎',
+			// 是否显示喉结
+			isShowAdam: true,
+			// 是否显示喉结提示文字
+			isShowAdamText: '隐藏喉结',
+			// 是否正在查看声门
+			isCheckGlottis: false,
+			// 查看声门按钮文字
+			checkGlottisText: '点击开始查看声门',
+			// 禁止面板背景色
+			loadingBgc: 'rgba(0,0,0,0.5)',
+			// 上颚透明度
+			maxillaOpacityValue: 1
 		};
 	},
 	mounted() {
@@ -272,34 +357,138 @@ export default {
 	methods: {
 		// 测试用例
 		test() {
-			// 周六之前的任务是完成第一阶段前端代码的交付
-			// console.log(this.scene);
+			// 打印模型下标与名称
 			// this.getModelGroup();
-			
+			// 测试模型参数
 			// this.showModel(0, false);
-			// this.showModel(2, true);
-			// _.each(this.getEachItem(this.fbxGroupKeys.b.keys), function(item, key) {
-			// 	console.log(key, item);
+			// this.showModel(1, true);
+			// _.each(this.getEachItem(this.fbxGroupKeys.a.keys), function(item, key) {
+			// 	console.log(key, item.name, item);
 			// });
-			// console.log(this.getEachItem(this.fbxGroupKeys.b.keys).length);
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[0].visible = false;
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[1].visible = false;
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[2].morphTargetInfluences[0] = 5;
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[3].visible = false;
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[4].morphTargetInfluences[0] = 5;
-
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[0].visible = false;
-			// this.getEachItem(this.fbxGroupKeys.a.keys)[0].morphTargetInfluences[0] = 1;
+			// console.log(this.getEachItem(this.fbxGroupKeys.a.keys).length);
 		},
-		// 修改材质透明度，第一个参数是FBX模型群组，第二个参数是透明系数（0-1）
-		setOpacityVal(opacityValue) {
+		getModelGroup() {
+			// 查看模型序列，待会写一个方法截取结尾01、02、03、04以及没有结尾的自动分abcd多组
+			_.each(this.fbxGroup.children, function(item, key) {
+				console.log(key, item.name);
+			});
+		},
+		// 修改人体透明度
+		setOpacityVal() {
+			var self = this;
 			_.each(this.getEachItem(this.fbxGroupKeys.human.keys), function(item, key) {
 				item.material.transparent = true;
-				item.material.opacity = opacityValue;
+				item.material.opacity = self.opacityValue;
 			});
+		},
+		// 修改气管透明度
+		setThroatOpacityVal() {
+			var self = this;
+			_.each(this.getEachItem(this.fbxGroupKeys.throat.keys), function(item, key) {
+				_.each(item.material, function(obj, index) {
+					obj.transparent = true;
+					obj.opacity = self.throatOpacityValue;
+				});
+			});
+		},
+		// 修改颈椎透明度
+		setVertebraeOpacityVal() {
+			var self = this;
+			_.each(this.getEachItem(this.fbxGroupKeys.vertebrae.keys), function(item, key) {
+				item.material.transparent = true;
+				item.material.opacity = self.vertebraeOpacityValue;
+			});
+		},
+		// 修改喉结透明度
+		setAdamOpacityVal() {
+			var self = this;
+			_.each(this.getEachItem(this.fbxGroupKeys.adam.keys), function(item, key) {
+				item.material.transparent = true;
+				item.material.opacity = self.adamOpacityValue;
+			});
+		},
+		// 修改人体显隐
+		visHuman() {
+			var self = this;
+			this.isShowHuman = !this.isShowHuman;
+			if (!this.isShowHuman) {
+				this.isShowHumanText = '显示人体';
+			} else {
+				this.isShowHumanText = '隐藏人体';
+			}
+			_.each(this.getEachItem(this.fbxGroupKeys.human.keys), function(item, key) {
+				item.visible = self.isShowHuman;
+			});
+		},
+		// 修改气管显隐
+		visThroat() {
+			var self = this;
+			this.isShowThroat = !this.isShowThroat;
+			if (!this.isShowThroat) {
+				this.isShowThroatText = '显示气管';
+			} else {
+				this.isShowThroatText = '隐藏气管';
+			}
+			_.each(this.getEachItem(this.fbxGroupKeys.throat.keys), function(item, key) {
+				_.each(item.material, function(obj, index) {
+					obj.visible = self.isShowThroat;
+				});
+			});
+		},
+		// 修改颈椎显隐
+		visVertebrae() {
+			var self = this;
+			this.isShowVertebrae = !this.isShowVertebrae;
+			if (!this.isShowVertebrae) {
+				this.isShowVertebraeText = '显示颈椎';
+			} else {
+				this.isShowVertebraeText = '隐藏颈椎';
+			}
+			_.each(this.getEachItem(this.fbxGroupKeys.vertebrae.keys), function(item, key) {
+				item.visible = self.isShowVertebrae;
+			});
+		},
+		// 修改喉结显隐
+		visAdam() {
+			var self = this;
+			this.isShowAdam = !this.isShowAdam;
+			if (!this.isShowAdam) {
+				this.isShowAdamText = '显示喉结';
+			} else {
+				this.isShowAdamText = '隐藏喉结';
+			}
+			_.each(this.getEachItem(this.fbxGroupKeys.adam.keys), function(item, key) {
+				item.visible = self.isShowAdam;
+			});
+		},
+		// 修改上颚透明度，好复杂后期再加吧
+		setMaxillaOpacityVal() {
+			// this.showModel(0, false);
+			// this.showModel(4, true);
+			// console.log(this.getEachItem(this.fbxGroupKeys.d.keys)[2].material);
+			this.$message.warning('功能开发中！');
+		},
+		// 查看声门
+		checkGlottis() {
+			this.isCheckGlottis = !this.isCheckGlottis;
+			if (this.isCheckGlottis) {
+				this.showModel(0, false);
+				this.showModel(4, true);
+				this.checkGlottisText = '退出声门查看';
+				// 目前的方案是直接visible => 0/1，后期改成用透明度来做
+				this.getEachItem(this.fbxGroupKeys.d.keys)[2].visible = false;
+			} else {
+				this.showModel(0, false);
+				this.showModel(3, true);
+				this.setHeadAngle();
+				this.checkGlottisText = '点击开始查看声门';
+				// 目前的方案是直接visible => 0/1，后期改成用透明度来做
+				this.getEachItem(this.fbxGroupKeys.d.keys)[2].visible = true;
+			}
 		},
 		// 修改张口角度
 		setMouseAngle() {
+			this.isCheckGlottis = false;
 			this.showModel(0, false);
 			this.showModel(1, true);
 			this.getEachItem(this.fbxGroupKeys.a.keys)[0].morphTargetInfluences[0] = this.mouseAngle.num;
@@ -307,6 +496,7 @@ export default {
 		},
 		// 修改下巴前伸
 		setChinShift() {
+			this.isCheckGlottis = false;
 			this.showModel(0, false);
 			this.showModel(2, true);
 			this.getEachItem(this.fbxGroupKeys.b.keys)[1].morphTargetInfluences[0] = this.chinShift.num;
@@ -314,6 +504,7 @@ export default {
 		},
 		// 修改头部仰头动作
 		setHeadAngle() {
+			this.isCheckGlottis = false;
 			this.showModel(0, false);
 			this.showModel(3, true);
 			this.getEachItem(this.fbxGroupKeys.c.keys)[1].morphTargetInfluences[0] = this.headAngle.num;
@@ -325,40 +516,41 @@ export default {
 			switch (self.headLevel) {
 				case 1:
 					self.headAngle = {
-						num: 25,
-						minnum: 25,
-						maxnum: 35,
-						stepnum: 5,
+						num: 0.75,
+						minnum: 0.75,
+						maxnum: 1,
+						stepnum: 0.0025,
 						isoff: false
 					};
 					break;
 
 				case 2:
 					self.headAngle = {
-						num: 15,
-						minnum: 15,
-						maxnum: 25,
-						stepnum: 5,
+						num: 0.5,
+						minnum: 0.5,
+						maxnum: 0.75,
+						stepnum: 0.0025,
 						isoff: false
 					};
 					break;
 
 				case 3:
 					self.headAngle = {
-						num: 5,
-						minnum: 5,
-						maxnum: 15,
-						stepnum: 5,
+						num: 0.25,
+						minnum: 0.25,
+						maxnum: 0.5,
+						stepnum: 0.0025,
 						isoff: false
 					};
 					break;
 
 				case 4:
 					self.headAngle = {
-						num: -5,
-						minnum: -5,
-						maxnum: 5,
-						stepnum: 5,
+						num: 0,
+						minnum: 0,
+						maxnum: 0.25,
+						stepnum: 0.0025,
+						shownum: -5,
 						isoff: false
 					};
 					break;
@@ -448,12 +640,6 @@ export default {
 				}
 			});
 		},
-		getModelGroup() {
-			// 查看模型序列，待会写一个方法截取结尾01020304以及没有结尾的自动分abcd多组
-			_.each(this.fbxGroup.children, function(item, key) {
-				console.log(key, item.name);
-			});
-		},
 		modelInit() {
 			this.clock = new THREE.Clock();
 			this.fbxloader = new FBXLoader();
@@ -503,7 +689,7 @@ export default {
 			self.scene.add(grid);
 
 			// 使用FBXLoader加载模型
-			self.fbxloader.load('models/Human-005.fbx', function(object) {
+			self.fbxloader.load(self.modelUrl, function(object) {
 				self.mixer = new THREE.AnimationMixer(object);
 
 				// const action = self.mixer.clipAction(object.animations[0]);
@@ -517,8 +703,9 @@ export default {
 				});
 
 				// 调整模型的初始中心点
-				// object.position.y = 220;
+				object.position.y = 20;
 
+				// 场景对象中添加FBX模型对象
 				self.scene.add(object);
 
 				// 添加fbx模型对象群组，并完成各类初始化
@@ -528,13 +715,13 @@ export default {
 				self.initVisible();
 
 				// 设置初始化透明度
-				self.setOpacityVal(self.opacityValue);
+				self.setOpacityVal();
 
 				// 默认显示第一个张口角度的模型
 				self.showModel(0, false);
 				self.showModel(1, true);
 
-				// 仅在开发中测试用
+				// 测试方法，仅在开发中使用
 				self.test();
 			});
 
@@ -656,6 +843,10 @@ export default {
 		.tool-item-input-long {
 			width: calc(130% - @tooltitleWidthLong);
 		}
+	}
+	.tool-item-btnbox {
+		width: calc(~'100% + 12px');
+		justify-content: space-between;
 	}
 }
 
