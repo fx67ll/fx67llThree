@@ -22,7 +22,7 @@ export const fx67llRoutes = [
 	{
 		path: '/back',
 		name: 'back',
-		component: () => import('@v/back.vue') //备份
+		component: () => import('@v/index-back.vue') //备份
 	},
 ]
 
