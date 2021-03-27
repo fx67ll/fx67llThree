@@ -7,35 +7,32 @@
 					<span class="tool-item-title">查看声门：</span>
 					<el-button @click="checkGlottis()">{{ checkGlottisText }}</el-button>
 				</div>
-				<!-- <div v-show="isCheckGlottis">
+				<div v-show="isCheckGlottis">
 					<div class="tool-item-box">
-						<span class="tool-item-title">(查看声门)上颚透明：</span>
-						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+						<span class="tool-item-title">气管透明：</span>
+						<el-slider class="tool-item-slider" v-model="checkOpacityValue[0]" :min="0" :max="1" :step="0.01" @change="setCheckOpacityValA()"></el-slider>
 					</div>
 					<div class="tool-item-box">
-						<span class="tool-item-title">(查看声门)下巴透明：</span>
-						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+						<span class="tool-item-title">舌头透明：</span>
+						<el-slider class="tool-item-slider" v-model="checkOpacityValue[1]" :min="0" :max="1" :step="0.01" @change="setCheckOpacityValB()"></el-slider>
 					</div>
 					<div class="tool-item-box">
-						<span class="tool-item-title">(查看声门)舌头透明：</span>
-						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+						<span class="tool-item-title">舌骨透明：</span>
+						<el-slider class="tool-item-slider" v-model="checkOpacityValue[2]" :min="0" :max="1" :step="0.01" @change="setCheckOpacityValC()"></el-slider>
 					</div>
 					<div class="tool-item-box">
-						<span class="tool-item-title">(查看声门)舌骨透明：</span>
-						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
+						<span class="tool-item-title">喉结透明：</span>
+						<el-slider class="tool-item-slider" v-model="checkOpacityValue[3]" :min="0" :max="1" :step="0.01" @change="setCheckOpacityValD()"></el-slider>
 					</div>
-					<div class="tool-item-box">
-						<span class="tool-item-title">(查看声门)喉结透明：</span>
-						<el-slider class="tool-item-slider" v-model="maxillaOpacityValue" :min="0" :max="1" :step="0.01" @change="setMaxillaOpacityVal()"></el-slider>
-					</div>
-				</div> -->
+				</div>
 				<!-- <div class="tool-item-box" style="justify-content: flex-start;">
 					<span class="tool-item-title">测试工具：</span>
 					<el-button @click="test">测试</el-button>
 				</div> -->
 			</div>
 			<div class="info-box">
-				<el-card>
+				<el-card class="info-box-card" shadow="hover">
+					<div slot="header" class="info-box-title">实时数据演算结果</div>
 					<div class="info-item-box">
 						<span class="info-item-title">张口角度：</span>
 						<span class="info-item-num">{{ (mouseAngle.num * 30).toFixed(0) }}°</span>
@@ -174,14 +171,15 @@
 					<span class="tool-item-title tool-item-title-long">舌颏距离缺失下常数：</span>
 					<el-input class="tool-item-input tool-item-input-long" v-model="tongueConstantB" :clearable="true" placeholder="请输入舌颏距离缺失下常数"></el-input>
 				</div>
+				<div class="tool-item-box">提示：使用透明度设置后，部分模型必须旋转一定角度才可以透视</div>
 				<div class="tool-item-box">
 					<span class="tool-item-title">人体透明：</span>
 					<el-slider class="tool-item-slider" v-model="opacityValue" :min="0" :max="1" :step="0.01" show-input @change="setOpacityVal()"></el-slider>
 				</div>
-				<div class="tool-item-box">
+				<!-- <div class="tool-item-box">
 					<span class="tool-item-title">气管透明：</span>
 					<el-slider class="tool-item-slider" v-model="throatOpacityValue" :min="0" :max="1" :step="0.01" show-input @change="setThroatOpacityVal()"></el-slider>
-				</div>
+				</div> -->
 				<div class="tool-item-box">
 					<span class="tool-item-title">颈椎透明：</span>
 					<el-slider class="tool-item-slider" v-model="vertebraeOpacityValue" :min="0" :max="1" :step="0.01" show-input @change="setVertebraeOpacityVal()"></el-slider>
@@ -191,10 +189,10 @@
 					<el-slider class="tool-item-slider" v-model="adamOpacityValue" :min="0" :max="1" :step="0.01" show-input @change="setAdamOpacityVal()"></el-slider>
 				</div>
 				<div class="tool-item-box tool-item-btnbox">
-					<el-button :type="isShowHuman ? 'primary' : 'info'" @click="visHuman()">{{ isShowHumanText }}</el-button>
-					<el-button :type="isShowThroat ? 'primary' : 'info'" @click="visThroat()">{{ isShowThroatText }}</el-button>
-					<el-button :type="isShowVertebrae ? 'primary' : 'info'" @click="visVertebrae()">{{ isShowVertebraeText }}</el-button>
-					<el-button :type="isShowAdam ? 'primary' : 'info'" @click="visAdam()">{{ isShowAdamText }}</el-button>
+					<el-button :type="isShowHuman ? 'primary' : 'info'" class="tool-item-btn" @click="visHuman()">{{ isShowHumanText }}</el-button>
+					<!-- <el-button :type="isShowThroat ? 'primary' : 'info'" class="tool-item-btn" @click="visThroat()">{{ isShowThroatText }}</el-button> -->
+					<el-button :type="isShowVertebrae ? 'primary' : 'info'" class="tool-item-btn" @click="visVertebrae()">{{ isShowVertebraeText }}</el-button>
+					<el-button :type="isShowAdam ? 'primary' : 'info'" class="tool-item-btn" @click="visAdam()">{{ isShowAdamText }}</el-button>
 				</div>
 			</div>
 		</div>
@@ -270,6 +268,10 @@ export default {
 				// 喉结编组，用于透明度修改
 				adam: {
 					keys: [15, 16, 18]
+				},
+				// 查看声门透明度编组，目前用的是shange和喉结
+				check: {
+					keys: [12, 19]
 				}
 			},
 			// 是否显示全部模型
@@ -347,8 +349,8 @@ export default {
 			checkGlottisText: '点击开始查看声门',
 			// 禁止面板背景色
 			loadingBgc: 'rgba(0,0,0,0.5)',
-			// 上颚透明度
-			maxillaOpacityValue: 1
+			// 查看声门后各种透明度参数，顺序是气管，舌头，舌骨，喉结
+			checkOpacityValue: [0.5, 1, 1, 1]
 		};
 	},
 	mounted() {
@@ -358,20 +360,71 @@ export default {
 		// 测试用例
 		test() {
 			// 打印模型下标与名称
-			// this.getModelGroup();
+			this.getModelGroup();
 			// 测试模型参数
 			// this.showModel(0, false);
-			// this.showModel(1, true);
-			// _.each(this.getEachItem(this.fbxGroupKeys.a.keys), function(item, key) {
-			// 	console.log(key, item.name, item);
+			// this.showModel(4, true);
+			// _.each(this.getEachItem(this.fbxGroupKeys.d.keys), function(item, key) {
+			// 	console.log(key, item.name, item.material);
 			// });
-			// console.log(this.getEachItem(this.fbxGroupKeys.a.keys).length);
+			// console.log(this.getEachItem(this.fbxGroupKeys.d.keys).length);
+			// console.log(this.getEachItem(this.fbxGroupKeys.d.keys)[2].material);
 		},
 		getModelGroup() {
 			// 查看模型序列，待会写一个方法截取结尾01、02、03、04以及没有结尾的自动分abcd多组
 			_.each(this.fbxGroup.children, function(item, key) {
 				console.log(key, item.name);
 			});
+		},
+		// 查看声门气管透明度调节
+		setCheckOpacityValA() {
+			this.showModel(0, false);
+			this.showModel(4, true);
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[0].transparent = true;
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[0].opacity = this.checkOpacityValue[0];
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[1].transparent = true;
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[1].opacity = this.checkOpacityValue[0];
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[2].transparent = true;
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[2].opacity = this.checkOpacityValue[0];
+		},
+		// 查看声门舌头透明度调节
+		setCheckOpacityValB() {
+			this.showModel(0, false);
+			this.showModel(4, true);
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[3].transparent = true;
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[3].opacity = this.checkOpacityValue[1];
+		},
+		// 查看声门舌骨透明度调节
+		setCheckOpacityValC() {
+			this.showModel(0, false);
+			this.showModel(4, true);
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[4].transparent = true;
+			this.getEachItem(this.fbxGroupKeys.check.keys)[0].material[4].opacity = this.checkOpacityValue[2];
+		},
+		// 查看声门喉结透明度调节
+		setCheckOpacityValD() {
+			this.showModel(0, false);
+			this.showModel(4, true);
+			this.getEachItem(this.fbxGroupKeys.check.keys)[1].material.transparent = true;
+			this.getEachItem(this.fbxGroupKeys.check.keys)[1].material.opacity = this.checkOpacityValue[3];
+		},
+		// 查看声门
+		checkGlottis() {
+			this.isCheckGlottis = !this.isCheckGlottis;
+			if (this.isCheckGlottis) {
+				this.showModel(0, false);
+				this.showModel(4, true);
+				this.checkGlottisText = '退出声门查看';
+				this.getEachItem(this.fbxGroupKeys.check.keys)[0].visible = false;
+				this.setCheckOpacityValA();
+			} else {
+				this.showModel(0, false);
+				this.showModel(3, true);
+				this.setHeadAngle();
+				this.checkGlottisText = '点击开始查看声门';
+				this.getEachItem(this.fbxGroupKeys.check.keys)[0].visible = true;
+				this.checkOpacityValue = [0.5, 1, 1, 1];
+			}
 		},
 		// 修改人体透明度
 		setOpacityVal() {
@@ -460,31 +513,6 @@ export default {
 			_.each(this.getEachItem(this.fbxGroupKeys.adam.keys), function(item, key) {
 				item.visible = self.isShowAdam;
 			});
-		},
-		// 修改上颚透明度，好复杂后期再加吧
-		setMaxillaOpacityVal() {
-			// this.showModel(0, false);
-			// this.showModel(4, true);
-			// console.log(this.getEachItem(this.fbxGroupKeys.d.keys)[2].material);
-			this.$message.warning('功能开发中！');
-		},
-		// 查看声门
-		checkGlottis() {
-			this.isCheckGlottis = !this.isCheckGlottis;
-			if (this.isCheckGlottis) {
-				this.showModel(0, false);
-				this.showModel(4, true);
-				this.checkGlottisText = '退出声门查看';
-				// 目前的方案是直接visible => 0/1，后期改成用透明度来做
-				this.getEachItem(this.fbxGroupKeys.d.keys)[2].visible = false;
-			} else {
-				this.showModel(0, false);
-				this.showModel(3, true);
-				this.setHeadAngle();
-				this.checkGlottisText = '点击开始查看声门';
-				// 目前的方案是直接visible => 0/1，后期改成用透明度来做
-				this.getEachItem(this.fbxGroupKeys.d.keys)[2].visible = true;
-			}
 		},
 		// 修改张口角度
 		setMouseAngle() {
@@ -652,8 +680,9 @@ export default {
 			// 模型加载的容器
 			const container = document.getElementById('model-container');
 
+			// 设置相机对象初始参数
 			self.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
-			self.camera.position.set(100, 200, 300);
+			self.camera.position.set(-20, 30, 150);
 
 			self.scene = new THREE.Scene();
 			self.scene.background = new THREE.Color(0xa0a0a0);
@@ -703,7 +732,8 @@ export default {
 				});
 
 				// 调整模型的初始中心点
-				object.position.y = 20;
+				object.position.x = -12;
+				object.position.y = 10;
 
 				// 场景对象中添加FBX模型对象
 				self.scene.add(object);
@@ -732,12 +762,12 @@ export default {
 			container.appendChild(self.renderer.domElement);
 
 			const controls = new OrbitControls(self.camera, self.renderer.domElement);
-			controls.target.set(0, -50, 0);
+			controls.target.set(0, 0, 0);
 			controls.update();
 
 			window.addEventListener('resize', self.onWindowResize);
 
-			// 帧率监测模块引入
+			// 监测模块引入
 			self.stats = new Stats();
 			container.appendChild(self.stats.dom);
 		},
@@ -767,113 +797,5 @@ export default {
 </script>
 
 <style lang="less" scoped="scoped">
-.model-box {
-	width: 100%;
-	height: 100%;
-	.ban-user-select();
-	.three-box {
-		width: 100%;
-		height: 100%;
-	}
-	.test-box {
-		width: 400px;
-		padding: 20px;
-		position: absolute;
-		top: 70px;
-		left: 30px;
-	}
-	.panel-box {
-		width: 500px;
-		padding: 20px;
-		position: absolute;
-		top: 30px;
-		right: 30px;
-	}
-}
-
-// 本页面中工具盒子公共样式
-@tooltitleWidth: 120px;
-@tooltitleWidthMid: 160px;
-@tooltitleWidthLong: 300px;
-.tool-box {
-	.tool-item-box {
-		width: 100%;
-		display: flex;
-		justify-content: flex-start;
-		margin-bottom: 10px;
-		// 标题样式
-		.tool-item-title {
-			width: @tooltitleWidth;
-			color: #727479;
-			font-size: 20px;
-			line-height: 40px;
-			font-weight: 600;
-		}
-		.tool-item-title-middle {
-			width: @tooltitleWidthMid;
-		}
-		.tool-item-title-long {
-			width: @tooltitleWidthLong;
-		}
-
-		// 选择器样式
-		.tool-item-select {
-			width: calc(70% - @tooltitleWidth);
-		}
-
-		// 拖动条样式
-		.tool-item-slider {
-			width: calc(100% - @tooltitleWidth);
-			position: relative;
-			left: 12px;
-		}
-		.tool-item-slider-middle {
-			width: calc(100% - @tooltitleWidthMid);
-		}
-		.tool-item-slider-long {
-			width: calc(100% - @tooltitleWidthLong);
-		}
-
-		// 输入样式
-		.tool-item-input {
-			width: calc(70% - @tooltitleWidth);
-			position: relative;
-			left: 12px;
-		}
-		.tool-item-input-long {
-			width: calc(130% - @tooltitleWidthLong);
-		}
-	}
-	.tool-item-btnbox {
-		width: calc(~'100% + 12px');
-		justify-content: space-between;
-	}
-}
-
-// 实时数据盒子公共样式
-@infotitleWidth: 170px;
-.info-box {
-	margin-top: 50px;
-	padding: 20px 0 10px 0;
-	.info-item-box {
-		width: 100%;
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 10px;
-		font-size: 18px;
-		line-height: 20px;
-		.info-item-title {
-			width: @infotitleWidth;
-			color: #727479;
-			text-align: right;
-		}
-		.info-item-num {
-			width: calc(100% - @infotitleWidth);
-			text-indent: 20px;
-		}
-	}
-	.info-item-box:nth-child(1) {
-		margin-top: 10px;
-	}
-}
+@import '@a/styles/index.less';
 </style>
