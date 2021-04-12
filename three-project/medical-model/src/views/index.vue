@@ -45,31 +45,31 @@
 						<span class="info-item-title">仰头角度：</span>
 						<span class="info-item-num">{{ ((headAngle.num / 1) * 40 - 5).toFixed(0) }}°</span>
 					</div>
-					<div class="info-item-box">
+					<!-- <div class="info-item-box">
 						<span class="info-item-title">甲颏距离：</span>
-						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">0mm</span>
 						<span class="info-item-num">( 后台实时计算 )</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">喉结位移距离：</span>
-						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">0mm</span>
 						<span class="info-item-num">( 后台实时计算 )</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">颞颌关节位移距离：</span>
-						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">0mm</span>
 						<span class="info-item-num">( 后台实时计算 )</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">舌体厚度：</span>
-						<!-- <span class="info-item-num">0mm</span> -->
+						<span class="info-item-num">0mm</span>
 						<span class="info-item-num">( 后台实时计算 )</span>
 					</div>
 					<div class="info-item-box">
 						<span class="info-item-title">声门视野：</span>
-						<!-- <span class="info-item-num">0cm</span> -->
+						<span class="info-item-num">0cm</span>
 						<span class="info-item-num">( 后台实时计算 )</span>
-					</div>
+					</div> -->
 				</el-card>
 			</div>
 		</div>
@@ -196,6 +196,12 @@
 				</div>
 			</div>
 		</div>
+		<div class="fx67ll-footer">
+			Designed & Powered by
+			<a href="https://fx67ll.com" target="_blank">fx67ll</a>
+			&#12288; Copyright© 2018-{{ this.year }}&#12288;
+			<a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">皖ICP备18017174号-2</a>
+		</div>
 	</div>
 </template>
 
@@ -207,10 +213,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 import _ from 'underscore';
+import moment from 'moment';
 export default {
 	name: 'modelIndex',
 	data() {
 		return {
+			// footer
+			year: moment().format('YYYY'),
 			// 相机对象
 			camera: null,
 			// 场景对象
