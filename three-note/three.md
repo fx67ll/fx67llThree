@@ -41,3 +41,6 @@
 ### 几何体
 参考资料
 + [学习Three.js——几何体(Geometry)](https://blog.csdn.net/a13602955218/article/details/85222878 "学习Three.js——几何体(Geometry)")
+
+下一步从0.1-1.2学习开始记录
+千里之行，始于足下
