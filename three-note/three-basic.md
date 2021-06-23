@@ -25,7 +25,7 @@ var geometryF = new THREE.IcosahedronGeometry(50);
 
 ### 材质对象`Material()`  
 ```
-var material = new THREE.MeshLamberMaterial({
+var material = new THREE.MeshLambertMaterial({
 	color: 0x0000ff
 });
 ```
@@ -38,7 +38,7 @@ var material = new THREE.MeshLamberMaterial({
 
 ### 材质对象常见类型
 + `MeshBasicMaterial`，基础网格材质，不受光照影响的材质  
-+ `MeshLambertMarterial`，Lambert网格材质，与光照有反应，漫反射  
++ `MeshLambertMaterial`，Lambert网格材质，与光照有反应，漫反射  
 + `MeshPhongMarterial`，高光Phong材质，与光照有反应  
 + `MeshStandarMaterial`，PBR物理材质，相比较高光Phong材质可以更好的模拟金属、玻璃等效果  
 
@@ -60,7 +60,7 @@ scene.add(point);
 
 // 创建环境光，散射光，模拟现实环境，不能影响阴影生成，必须和其他光源配合所以还需要点光源配合，它也不需要指定位置
 var ombient = new THREE.AmbientLight(0x444444);
-scene.add(ambient);
+scene.add(ombient);
 ```
 
 ### 光源对象常见类型
@@ -89,7 +89,7 @@ var camera = new THREE.OrthographicCamera(-s*k,s*k,s,-s,1,1000);
 // 设置相机位置
 camera.position.set(200,200,200);
 // 设置相机方向，用于指向场景对象
-camera.lookAt(sence.position);
+camera.lookAt(scene.position);
 ```
 
 ### 渲染器对象`WebGLRenderer()`，将之前创建的场景对象和相机对象都渲染到DOM元素上  

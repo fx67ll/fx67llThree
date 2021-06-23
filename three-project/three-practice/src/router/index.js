@@ -13,19 +13,18 @@ Router.prototype.push = function push(location) {
 
 import store from '@/store/index.js'
 
-export const fx67llRoutes = [
-	{
+export const fx67llRoutes = [{
 		path: '/',
 		name: 'index',
 		component: () => import('@v/index.vue') // 首页
 	},
 	{
-		path: 'note/one',
+		path: '/note/one',
 		name: 'noteOne',
 		component: () => import('@v/note/note-1.vue') // 学习笔记第一页
 	},
 	{
-		path: 'practice/basic',
+		path: '/practice/basic',
 		name: 'practiceBaisc',
 		component: () => import('@v/practice/practice-basic.vue') // 基础练习
 	},

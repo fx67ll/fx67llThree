@@ -6,7 +6,12 @@ learn Threejs
 for project now  
 note & plagiarism examples
 
+## 0.2.2.20210623
+* 继续推进Three系统知识体系构建的学习
+* 简易的Threejs整体架构已了解清楚，并推进相关实战练习  
+
 ## 0.2.1.20210621
+* 学习3DMAX的计划暂时延后  
 * 开始推进Three系统知识体系构建的学习
 * 概括性的了解整个程序的结构并做记录
 
