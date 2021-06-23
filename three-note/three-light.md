@@ -1,4 +1,5 @@
 # Threejs 光源对象  
+## 详细学习Threejs中关于光源对象的相关资料，参考资料[《Three.js教程》](http://www.webgl3d.cn/Three.js/ "Three.js教程")
 
 ## 光源类型以及用途详解
 注意！！！  
@@ -27,7 +28,6 @@
 
 ```
 var hemiLight = new THREE.HemisphereLight(天空的反光颜色,地面的反光颜色,光的强度)
-var hemiLight = new THREE.HemisphereLight(天空的反光颜色,地面的反光颜色,光的强度)
 // 这个也是默认位置
 hemiLight.position.set(0, 100, 0)
 scene.add(hemiLight)
@@ -52,6 +52,7 @@ scene.add(ambientLight)
 + AmbientLight 物体明暗对比无法呈现
 + HemisphereLight 物体明暗对比比较明显
 + 如果想模拟真实世界，建议用`THREE.HemisphereLight`，如果对三维的展现不是特别苛刻，可以用`THREE.AmbientLight`和`THREE.DirectionalLight`
+
 
 ### 点光源 PointLight
 + 点光源就像生活中的白炽灯，光线沿着发光核心向外发散，同一平面的不同位置与点光源光线入射角是不同的，点光源照射下，同一个平面不同区域是呈现出不同的明暗效果
