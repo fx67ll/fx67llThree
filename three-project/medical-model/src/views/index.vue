@@ -359,7 +359,11 @@ export default {
 			// 禁止面板背景色
 			loadingBgc: 'rgba(0,0,0,0.5)',
 			// 查看声门后各种透明度参数，顺序是气管，舌头，舌骨，喉结
-			checkOpacityValue: [0.5, 1, 1, 1]
+			checkOpacityValue: [0.5, 1, 1, 1],
+			// 模型是否加载完成
+			modelLoading: false,
+			// 模型加载进度提示
+			modelLoadingText: '0%'
 		};
 	},
 	mounted() {
@@ -382,7 +386,7 @@ export default {
 		getModelGroup() {
 			// 查看模型序列，待会写一个方法截取结尾01、02、03、04以及没有结尾的自动分abcd多组
 			_.each(this.fbxGroup.children, function(item, key) {
-				console.log(key, item.name);
+				// console.log(key, item.name);
 			});
 		},
 		// 查看声门气管透明度调节
@@ -725,44 +729,56 @@ export default {
 			grid.material.opacity = 0.2;
 			grid.material.transparent = true;
 			self.scene.add(grid);
-
+			
+			// 开始加载模型
+			this.modelLoading = true;
 			// 使用FBXLoader加载模型
-			self.fbxloader.load(self.modelUrl, function(object) {
-				self.mixer = new THREE.AnimationMixer(object);
+			self.fbxloader.load(
+				self.modelUrl,
+				function(object) {
+					self.mixer = new THREE.AnimationMixer(object);
 
-				// const action = self.mixer.clipAction(object.animations[0]);
-				// action.play();
+					// const action = self.mixer.clipAction(object.animations[0]);
+					// action.play();
 
-				object.traverse(function(child) {
-					if (child.isMesh) {
-						child.castShadow = true;
-						child.receiveShadow = true;
+					object.traverse(function(child) {
+						if (child.isMesh) {
+							child.castShadow = true;
+							child.receiveShadow = true;
+						}
+					});
+
+					// 调整模型的初始中心点
+					object.position.x = -12;
+					object.position.y = 10;
+
+					// 场景对象中添加FBX模型对象
+					self.scene.add(object);
+
+					// 添加fbx模型对象群组，并完成各类初始化
+					self.fbxGroup = self.scene.children[4];
+
+					// 全部显示
+					self.initVisible();
+
+					// 设置初始化透明度
+					self.setOpacityVal();
+
+					// 默认显示第一个张口角度的模型
+					self.showModel(0, false);
+					self.showModel(1, true);
+
+					// 测试方法，仅在开发中使用
+					// self.test();
+				},
+				function(xhr) {
+					// console.log('加载完成的百分比' + (xhr.loaded / xhr.total) * 100 + '%');
+					self.modelLoadingText = (xhr.loaded / xhr.total) * 100 + '%';
+					if((xhr.loaded / xhr.total) * 100 + '%' === '100%'){
+						self.modelLoading = false;
 					}
-				});
-
-				// 调整模型的初始中心点
-				object.position.x = -12;
-				object.position.y = 10;
-
-				// 场景对象中添加FBX模型对象
-				self.scene.add(object);
-
-				// 添加fbx模型对象群组，并完成各类初始化
-				self.fbxGroup = self.scene.children[4];
-
-				// 全部显示
-				self.initVisible();
-
-				// 设置初始化透明度
-				self.setOpacityVal();
-
-				// 默认显示第一个张口角度的模型
-				self.showModel(0, false);
-				self.showModel(1, true);
-
-				// 测试方法，仅在开发中使用
-				self.test();
-			});
+				}
+			);
 
 			self.renderer = new THREE.WebGLRenderer({ antialias: true });
 			self.renderer.setPixelRatio(window.devicePixelRatio);
