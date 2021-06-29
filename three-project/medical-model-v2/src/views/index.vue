@@ -238,6 +238,7 @@ export default {
 			fbxGroup: null,
 			// 加载的模型地址
 			modelUrl: 'models/Human-004.fbx',
+			// modelUrl: 'models/XIONG220.fbx',
 			// FBX模型对象编组
 			// 替换模型后，用`getModelGroup()`方法根据模型序列编组
 			// 还需要修改下方：setMouseAngle()方法、setChinShift()方法、setHeadAngle()方法、checkGlottis()方法 的相关可以变形的模型下标，需要自己用`test()`方法尝试
@@ -729,7 +730,7 @@ export default {
 			grid.material.opacity = 0.2;
 			grid.material.transparent = true;
 			self.scene.add(grid);
-			
+
 			// 开始加载模型
 			this.modelLoading = true;
 			// 使用FBXLoader加载模型
@@ -737,6 +738,8 @@ export default {
 				self.modelUrl,
 				function(object) {
 					self.mixer = new THREE.AnimationMixer(object);
+					
+					console.log(object)
 
 					// const action = self.mixer.clipAction(object.animations[0]);
 					// action.play();
@@ -756,17 +759,17 @@ export default {
 					self.scene.add(object);
 
 					// 添加fbx模型对象群组，并完成各类初始化
-					self.fbxGroup = self.scene.children[4];
+					// self.fbxGroup = self.scene.children[4];
 
 					// 全部显示
-					self.initVisible();
+					// self.initVisible();
 
 					// 设置初始化透明度
-					self.setOpacityVal();
+					// self.setOpacityVal();
 
 					// 默认显示第一个张口角度的模型
-					self.showModel(0, false);
-					self.showModel(1, true);
+					// self.showModel(0, false);
+					// self.showModel(1, true);
 
 					// 测试方法，仅在开发中使用
 					// self.test();
@@ -774,7 +777,7 @@ export default {
 				function(xhr) {
 					// console.log('加载完成的百分比' + (xhr.loaded / xhr.total) * 100 + '%');
 					self.modelLoadingText = (xhr.loaded / xhr.total) * 100 + '%';
-					if((xhr.loaded / xhr.total) * 100 + '%' === '100%'){
+					if ((xhr.loaded / xhr.total) * 100 + '%' === '100%') {
 						self.modelLoading = false;
 					}
 				}
