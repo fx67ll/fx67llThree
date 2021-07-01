@@ -1,7 +1,7 @@
 # fx67llThree
 learn Threejs
 
-欢迎参观 [three.fx67ll.com](https://three.fx67ll.com '能够完成变形操作的Threejs医疗模型示例')
+欢迎参观 [three.fx67ll.com](http://three.fx67ll.com '能够完成变形操作的Threejs医疗模型示例')
 
 for project now  
 note & plagiarism examples
