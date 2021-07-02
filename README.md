@@ -1,10 +1,14 @@
 # fx67llThree
 learn Threejs
 
-欢迎参观 [three.fx67ll.com](http://three.fx67ll.com '能够完成变形操作的Threejs医疗模型示例')
+欢迎参观 [three.fx67ll.com](http://three.fx67ll.com '后期是展示个人所有Threejs的网站（目前是能够完成变形操作的Threejs医疗模型示例）')
 
 for project now  
 note & plagiarism examples
+
+## 0.2.2.20210702
+* 重新梳理项目的整体结构，`medical-model`主要是老版本的医疗模型示例，`medical-model-v2`主要放新版本的医疗模型示例  
+* 个人展示网站的构想变化，不放单独的示例，随着深入学习，示例逐渐增加，原有的网址将做一个新项目用于展示所有个人作品  
 
 ## 0.2.2.20210623
 * 继续推进Three系统知识体系构建的学习

@@ -1,4 +1,6 @@
-# EMMMS
+# Project Medical Model V2
+
+## EMMMS
 Esophagus Medical Model Management System  
 食道医疗模型管理系统  
 
