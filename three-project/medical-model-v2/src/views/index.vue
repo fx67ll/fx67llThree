@@ -200,7 +200,7 @@
 			Designed & Powered by
 			<a href="https://fx67ll.com" target="_blank">fx67ll</a>
 			&#12288; Copyright© 2018-{{ this.year }}&#12288;
-			<a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">皖ICP备18017174号-2</a>
+			<a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">皖ICP备18017174号-1</a>
 		</div>
 	</div>
 </template>
