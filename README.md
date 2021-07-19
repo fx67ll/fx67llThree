@@ -6,6 +6,10 @@ learn Threejs
 for project now  
 note & plagiarism examples
 
+## 0.x.x.202107xx
+* `下一版本`更改整体展示布局，不再做一个单独的项目展示  
+* `下一版本`在B站学习并只做ModelY与CSGO枪械模型  
+
 ## 0.2.2.20210702
 * 重新梳理项目的整体结构，`medical-model`主要是老版本的医疗模型示例，`medical-model-v2`主要放新版本的医疗模型示例  
 * 个人展示网站的构想变化，不放单独的示例，随着深入学习，示例逐渐增加，原有的网址将做一个新项目用于展示所有个人作品  
