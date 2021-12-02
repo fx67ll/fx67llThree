@@ -22,6 +22,7 @@ note & plagiarism examples
 * 更新笔记：了解Threejs中的Clock对象以及简单应用（已完成发布）  
 * 更新笔记：详解Threejs中的光源对象（已完成发布）  
 * `AMTPC`中的魔方小游戏完成后，代码记录一份到`three-project`中    
+* 添加魔方小游戏的原始代码  
 
 ## 0.2.2.20210702
 * 重新梳理项目的整体结构，`medical-model`主要是老版本的医疗模型示例，`medical-model-v2`主要放新版本的医疗模型示例  
