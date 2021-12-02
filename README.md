@@ -1,14 +1,27 @@
 # fx67llThree
 learn Threejs
 
-欢迎参观 [three.fx67ll.com](http://three.fx67ll.com '后期是展示个人所有Threejs的网站（目前是能够完成变形操作的Threejs医疗模型示例）')
+欢迎参观 [three.fx67ll.com](http://three.fx67ll.com "fx67ll's Three.js 作品合集的展示网站")
 
 for project now  
 note & plagiarism examples
 
-## 0.x.x.202107xx
-* `下一版本`更改整体展示布局，不再做一个单独的项目展示  
-* `下一版本`在B站学习并只做ModelY与CSGO枪械模型  
+### 主目录说明
+|  three-blog   | three-note  |  three-example  |  three-project  |
+|  :----:  |  :----:  |  :----:  |  :----:  |
+| three博客文章  | three学习笔记 | three学习示例 | three学习项目 |
+
+### 大版本更新说明
++ 1.0 从医疗模型项目开始入手学习Threejs  
++ 2.0 开始有意图的系统学习Threejs，但是未完成，下一版本继续  
++ 3.0 既要自我学习记笔记，也要能够转换成为给别人参考学习的博文  
+
+## 0.3.0.20211202
+* 个人展示网站重构已完成，项目代码在`AMTPC`中  
+* 开始将个人的学习笔记转换成可以给别人学习使用的博文  
+* 更新笔记：了解Threejs中的Clock对象以及简单应用（已完成发布）  
+* 更新笔记：详解Threejs中的光源对象（已完成发布）  
+* `AMTPC`中的魔方小游戏完成后，代码记录一份到`three-project`中    
 
 ## 0.2.2.20210702
 * 重新梳理项目的整体结构，`medical-model`主要是老版本的医疗模型示例，`medical-model-v2`主要放新版本的医疗模型示例  
