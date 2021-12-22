@@ -6,15 +6,20 @@ learn Threejs
 for project now  
 note & plagiarism examples
 
+
 ### 主目录说明
 |  three-blog   | three-note  |  three-example  |  three-project  |
 |  :----:  |  :----:  |  :----:  |  :----:  |
 | three博客文章  | three学习笔记 | three学习示例 | three学习项目 |
 
+
 ### 大版本更新说明
 + 1.0 从医疗模型项目开始入手学习Threejs  
 + 2.0 开始有意图的系统学习Threejs，但是未完成，下一版本继续  
 + 3.0 既要自我学习记笔记，也要能够转换成为给别人参考学习的博文  
+
+## 0.3.1.20211222
+* 添加魔方小游戏的原始代码（Step4）
 
 ## 0.3.0.20211202
 * 个人展示网站重构已完成，项目代码在`AMTPC`中  
@@ -22,7 +27,7 @@ note & plagiarism examples
 * 更新笔记：了解Threejs中的Clock对象以及简单应用（已完成发布）  
 * 更新笔记：详解Threejs中的光源对象（已完成发布）  
 * `AMTPC`中的魔方小游戏完成后，代码记录一份到`three-project`中    
-* 添加魔方小游戏的原始代码  
+* 添加魔方小游戏的原始代码（Step1/2/3）  
 
 ## 0.2.2.20210702
 * 重新梳理项目的整体结构，`medical-model`主要是老版本的医疗模型示例，`medical-model-v2`主要放新版本的医疗模型示例  
